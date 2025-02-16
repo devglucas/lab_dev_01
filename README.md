@@ -26,3 +26,9 @@ Neste laboratório, vamos projetar um Sistema de Matrículas para uma Universida
   - Como secretária da universidade, quero conseguir analisar a demanda de alunos por curso ofertado, para que eu possa cancelar disciplinas devido a baixa demanda.
   - Como secretária da universidade, quero ter acesso a pedidos de matrícula, para que possa analisar e deferir as matérias solicitadas pelos alunos em seu respectivo curso.
   - Como secretária da universidade, quero ter acesso a pedidos de cancelamento de matrícula, para que possa analisar e deferir pedidos de cancelamento em disciplinas anteriormente matrículadas.
+
+* João, de 48 anos, professor da universidade
+  - Como professor, quero ver a lista de alunos matriculados nas minhas turmas para me preparar melhor para as aulas e acompanhar o desempenho de cada um.
+ 
+* Usuário do sistema
+  - Como usuario, quero validar o meu login para garantir a segurança e integridade do mesmo.
