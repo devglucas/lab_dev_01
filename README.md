@@ -31,4 +31,4 @@ Neste laboratório, vamos projetar um Sistema de Matrículas para uma Universida
   - Como professor, quero ver a lista de alunos matriculados nas minhas turmas para me preparar melhor para as aulas e acompanhar o desempenho de cada um.
  
 * Usuário do sistema
-  - Como usuario, quero validar o meu login para garantir a segurança e integridade do mesmo.
+  - Como usuário, quero validar o meu login para garantir a segurança e integridade do mesmo.
