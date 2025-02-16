@@ -4,7 +4,7 @@ Neste laboratório, vamos projetar um Sistema de Matrículas para uma Universida
 ## Integrantes
 * Lucas Gonçalves dos Santos
 * Henrique Póvoa Peixoto
-* João
+* João Guilherme Falante Araújo
 
 
 ## Orientadores
