@@ -18,6 +18,7 @@ Neste laboratório, vamos projetar um Sistema de Matrículas para uma Universida
   - Como aluno, quero solicitar a matrícula na universidade, com o propósito de poder cursar as matérias escolhidas durante o semestre acadẽmico.
   - Como aluno, quero solicitar o cancelamento da minha matrícula, com o propósito de cancelar matérias que não desejo mais.
   - Como aluno, quero consultar as disciplinas ofertadas do meu curso, para que consiga as analisar e montar minha grade curricular.
+  - Como aluno, quero realizar o pagamento da minha matrícula, com o propósito de garantir minha inscrição nas disciplinas e continuar regularmente matriculado na universidade.
     
 
 * Valéria, de 32 anos, secretária da universidade
