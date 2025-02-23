@@ -19,6 +19,7 @@ class Aluno {
   +solicitarMatricula(disciplina: Disciplina, data: LocalDate): void
   +solicitarCancelamento(disciplina: Disciplina, data: LocalDate): void
   +realizarPagamento(): void
+  +consultarDisciplinas(disciplinas: List<Disciplina>): void
 }
 
 class Professor {
