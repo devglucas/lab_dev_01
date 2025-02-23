@@ -1,0 +1,5 @@
+package code;
+
+enum TIPODISCIPLINA {
+    OBRIGATORIA, OPTATIVA
+}
