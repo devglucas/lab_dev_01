@@ -1,83 +1,88 @@
 @startuml
 enum TIPODISCIPLINA {
-  OBRIGATORIA
-  OPTATIVA
+    OBRIGATORIA
+    OPTATIVA
 }
 
-class Usuario {
-  -nome: String
-  -senha: String
-  +validarLogin(senha: String): Boolean
-  +cadastrar(): void
+abstract Usuario {
+    - email: String
+    - senha: String
+    + validarLogin(senha: String): Boolean
 }
 
 class Aluno {
-  -nome: String
-  -curso: Curso
-  -matricula: String
-  -disciplinasMatriculadas: List<Disciplina>
-  +solicitarMatricula(disciplina: Disciplina, data: LocalDate): void
-  +solicitarCancelamento(disciplina: Disciplina, data: LocalDate): void
-  +realizarPagamento(): void
-  +consultarDisciplinas(disciplinas: List<Disciplina>): void
+    - nome: String
+    - curso: Curso
+    - matricula: String
+    -limOptativas: int = 2
+    -limObrigatorias: int = 4
+    - disciplinasMatriculadas: List
+    + solicitarMatricula(disciplina: Disciplina, data: LocalDate): void
+    + solicitarCancelamento(disciplina: Disciplina, data: LocalDate): void
+    + realizarPagamento(): void
+    + consultarDisciplinas(disciplinas: List): void
 }
 
 class Professor {
-  -nome: String
-  -matricula: String
-  -disciplinasMinistradas: List<Disciplina>
-  +consultarAlunosMatriculados(disciplina: Disciplina): void
+    - nome: String
+    - matricula: String
+    - disciplinasMinistradas: List
+    + consultarAlunosMatriculados(disciplina: Disciplina): void
 }
 
 class Secretaria {
-  +adicionarProfessores(): void
-  +removerProfessores(matricula: String): void
-  +editarProfessores(matricula: String): void
-  +adicionarDisciplinas(): void
-  +removerDisciplinas(id: int): void
-  +editarDisciplinas(id: int): void
-  +adicionarAlunos(): void
-  +removerAlunos(matricula: String): void
-  +editarAlunos(matricula: String): void
-  +aprovarMatricula(aluno: Aluno, disciplina: Disciplina): Aluno
-  +reprovarMatricula(aluno: Aluno, disciplina: Disciplina): void
-  +cancelarDisciplina(disciplina: Disciplina): void
-  +gerarCurriculo(): void
+    -List<Solicitacoes>: String
+    +cadatrarUsuario(): void
+    + adicionarProfessores(): void
+    + removerProfessores(matricula: String): void
+    + editarProfessores(matricula: String): void
+    + adicionarDisciplinas(): void
+    + removerDisciplinas(id: int): void
+    + editarDisciplinas(id: int): void
+    + adicionarAlunos(): void
+    + removerAlunos(matricula: String): void
+    + editarAlunos(matricula: String): void
+    + aprovarMatricula(aluno: Aluno, disciplina: Disciplina): Aluno
+    + reprovarMatricula(aluno: Aluno, disciplina: Disciplina): void
+    + cancelarDisciplina(disciplina: Disciplina): void
+    + gerarCurriculo(): void
 }
 
 class GerenteFinanceiro {
-  +calcularValor(disciplinas: List<Disciplina>): double
-  +emitirNotaFiscal(aluno: Aluno, valor: double): NotaFiscal
+    -id: int
+    -nome: String
+    + calcularValor(disciplinas: List): double
+    + emitirNotaFiscal(aluno: Aluno, valor: double): NotaFiscal
 }
 
 class Disciplina {
-  -nome: String
-  -id: int
-  -credito: int
-  -estaDisponivel: boolean
-  -limAcima: int = 60
-  -limBaixo: int = 3
-  -alunosMatriculados: List<Aluno>
-  +tipoDisciplina: TIPODISCIPLINA
-  +verificarDisponibilidade(): Boolean
-  +gerarCurriculo(): void
+    - nome: String
+    - id: int
+    - credito: int
+    - estaDisponivel: boolean
+    - limAcima: int = 60
+    - limBaixo: int = 3
+    - alunosMatriculados: List
+    + tipoDisciplina: TIPODISCIPLINA
+    + verificarDisponibilidade(): Boolean
+    + gerarCurriculo(): void
 }
 
 class Curso {
-  -nome: String
-  -creditosNecessarios: int
-  -disciplinas: List<Disciplina>
-  +getDisciplinas(): List<Disciplina>
-  +incluirDisciplina(): disciplina: Disciplina
-  +encontrarDisciplina(id: int, disciplinas: List<Disciplina>): void
+    - nome: String
+    - creditosNecessarios: int
+    - disciplinas: List
+    + getDisciplinas(): List
+    + incluirDisciplina(): disciplina: Disciplina
+    + encontrarDisciplina(id: int, disciplinas: List): void
 }
 
 class NotaFiscal {
-  -id: int
-  -valor: double
-  -dataEmissao: LocalDate
-  -aluno: Aluno
-  +emitirNotaFiscal(aluno: Aluno, valor: double): NotaFiscal
+    - id: int
+    - valor: double
+    - dataEmissao: LocalDate
+    - aluno: Aluno
+    + emitirNotaFiscal(aluno: Aluno, valor: double): NotaFiscal
 }
 
 Usuario <|-- Aluno
