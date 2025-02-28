@@ -16,17 +16,17 @@ class Aluno {
     - matricula: String
     -limOptativas: int = 2
     -limObrigatorias: int = 4
-    - disciplinasMatriculadas: List
+    - disciplinasMatriculadas: List<Disciplina>
     + solicitarMatricula(disciplina: Disciplina, data: LocalDate): void
     + solicitarCancelamento(disciplina: Disciplina, data: LocalDate): void
     + realizarPagamento(): void
-    + consultarDisciplinas(disciplinas: List): void
+    + consultarDisciplinas(disciplinas: List<Disciplina>): void
 }
 
 class Professor {
     - nome: String
     - matricula: String
-    - disciplinasMinistradas: List
+    - disciplinasMinistradas: List<Disciplina>
     + consultarAlunosMatriculados(disciplina: Disciplina): void
 }
 
@@ -51,7 +51,7 @@ class Secretaria {
 class GerenteFinanceiro {
     -id: int
     -nome: String
-    + calcularValor(disciplinas: List): double
+    + calcularValor(disciplinas: List<Disciplina>): double
     + emitirNotaFiscal(aluno: Aluno, valor: double): NotaFiscal
 }
 
@@ -62,7 +62,7 @@ class Disciplina {
     - estaDisponivel: boolean
     - limAcima: int = 60
     - limBaixo: int = 3
-    - alunosMatriculados: List
+    - alunosMatriculados: List<Aluno>
     + tipoDisciplina: TIPODISCIPLINA
     + verificarDisponibilidade(): Boolean
     + gerarCurriculo(): void
@@ -71,10 +71,10 @@ class Disciplina {
 class Curso {
     - nome: String
     - creditosNecessarios: int
-    - disciplinas: List
-    + getDisciplinas(): List
+    - disciplinas: List<Disciplina>
+    + getDisciplinas(): List<Disciplina>
     + incluirDisciplina(): disciplina: Disciplina
-    + encontrarDisciplina(id: int, disciplinas: List): void
+    + encontrarDisciplina(id: int, disciplinas: List<Disciplina>): void
 }
 
 class NotaFiscal {
