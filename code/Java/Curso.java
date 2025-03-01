@@ -7,7 +7,25 @@ public class Curso {
     private int creditosNecessarios;
     private List<Disciplina> disciplinas;
     
-    public List<Disciplina> getDisciplinas() { return null; }
-    public void incluirDisciplina(Disciplina disciplina) {}
-    public void encontrarDisciplina(int id, List<Disciplina> disciplinas) {}
+    public Curso(String nome, int creditosNecessarios, List<Disciplina> disciplinas){
+        this.nome = nome;
+        this.creditosNecessarios = creditosNecessarios;
+        this.disciplinas = disciplinas;
+    }
+
+    public List<Disciplina> getDisciplinas() { 
+        return disciplinas; 
+    }
+    
+    public void incluirDisciplina(Disciplina disciplina) {
+        disciplinas.add(disciplina);
+    }
+    public Disciplina encontrarDisciplina(int id) {
+        for (Disciplina disciplina : disciplinas) {
+            if (disciplina.getId() == id) {
+                return disciplina;
+            }
+        }
+        return null;
+    }
 }
