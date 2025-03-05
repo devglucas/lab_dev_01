@@ -61,6 +61,16 @@ public class Disciplina {
         this.alunosMatriculados = alunosMatriculados;
     }
 
+    public boolean adicionarAluno(Aluno aluno) {
+        if (quantAlunos < limCima) {
+            alunosMatriculados.add(aluno);
+            quantAlunos++;
+            estaDisponivel = quantAlunos >= limBaixo;
+            return true;
+        }
+        return false;
+    }
+
     public Disciplina(String nome, int id, int credito, int quantAlunos, TIPODISCIPLINA tipoDisciplina, List<Aluno> alunosMatriculados) {
         
         if (quantAlunos <= limBaixo || quantAlunos >= limCima) {

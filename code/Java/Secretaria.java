@@ -179,21 +179,57 @@ public void editarDisciplina(int id, String novoNome, int novoCredito) {
         System.out.println("Erro ao atualizar arquivo: " + e.getMessage());
     }
 }
-
-    public Aluno aprovarMatricula(Aluno aluno, Disciplina disciplina) {
-        // Implementação 
-        return aluno;
-    }
-    
-    public void reprovarMatricula(Aluno aluno, Disciplina disciplina) {
-        // Implementação 
-    }
     
     public void cancelarDisciplina(Disciplina disciplina) {
         // Implementação 
     }
     
     public void gerarCurriculo() {
-        // Implementação 
+    String nomeArquivo = "Curriculo.txt";
+
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomeArquivo))) {
+        writer.write("===== CURRÍCULO DA INSTITUIÇÃO =====\n\n");
+
+        // Adicionando Professores
+        writer.write(">>> PROFESSORES:\n");
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PROF))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                writer.write("- " + linha + "\n");
+            }
+        } catch (IOException e) {
+            writer.write("Erro ao ler professores: " + e.getMessage() + "\n");
+        }
+        writer.write("\n");
+
+        // Adicionando Alunos
+        writer.write(">>> ALUNOS:\n");
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_ALUN))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                writer.write("- " + linha + "\n");
+            }
+        } catch (IOException e) {
+            writer.write("Erro ao ler alunos: " + e.getMessage() + "\n");
+        }
+        writer.write("\n");
+
+        // Adicionando Disciplinas
+        writer.write(">>> DISCIPLINAS:\n");
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_DISC))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                writer.write("- " + linha + "\n");
+            }
+        } catch (IOException e) {
+            writer.write("Erro ao ler disciplinas: " + e.getMessage() + "\n");
+        }
+
+        System.out.println("Currículo gerado com sucesso no arquivo: " + nomeArquivo);
+
+    } catch (IOException e) {
+        System.out.println("Erro ao gerar currículo: " + e.getMessage());
     }
+}
+
 }

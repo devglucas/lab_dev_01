@@ -21,6 +21,7 @@ public class app {
             System.out.println("7. Adicionar Disciplina");
             System.out.println("8. Editar Disciplina");
             System.out.println("9. Remover Disciplina");
+            System.out.println("10. Gerar Currículo");
             System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
             opcao = scanner.nextInt();
@@ -66,7 +67,7 @@ public class app {
                     secretaria.removerAluno(idAlunoRemover);
                     break;
                 case 7:
-                int quantAlunos = 0;
+                    int quantAlunos = 0;
                     System.out.print("Nome da disciplina: ");
                     String nomeDisciplina = scanner.nextLine();
                     System.out.print("ID da disciplina: ");
@@ -74,7 +75,7 @@ public class app {
                     System.out.print("Créditos da disciplina: ");
                     int credito = scanner.nextInt();
                     System.out.print("Está disponível (true/false): ");
-                    scanner.nextLine(); //limpando o troço
+                    scanner.nextLine(); 
                     System.out.print("Tipo da disciplina (OBRIGATORIA/OPTATIVA): ");
                     String tipoDisciplinaStr = scanner.nextLine().toUpperCase();
                     TIPODISCIPLINA tipoDisciplina;
@@ -90,10 +91,10 @@ public class app {
                 case 8:
                     System.out.print("ID da disciplina a editar: ");
                     int idDisciplinaEdit = scanner.nextInt();
-                    scanner.nextLine(); // Limpar buffer
+                    scanner.nextLine(); 
                     System.out.print("Novo nome: ");
                     String novoNomeDisciplina = scanner.nextLine();
-                    System.out.print("Novo credito: ");
+                    System.out.print("Novo crédito: ");
                     int novoCredito = scanner.nextInt();
                     secretaria.editarDisciplina(idDisciplinaEdit, novoNomeDisciplina, novoCredito);
                     break;
@@ -102,8 +103,13 @@ public class app {
                     int idDisciplinaRemover = scanner.nextInt();
                     secretaria.removerDisciplina(idDisciplinaRemover);
                     break;
+                case 10:
+                    System.out.println("Gerando currículo");
+                    secretaria.gerarCurriculo();
+                    System.out.println("Currículo gerado em forma de txt");
+                    break;
                 case 0:
-                    System.out.println("Encerrando o sistema...");
+                    System.out.println("Encerrando a aplicação.");
                     break;
                 default:
                     System.out.println("Opção inválida, tente novamente.");
