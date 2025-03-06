@@ -5,14 +5,31 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Secretaria {
-    
-    private static final String FILE_PROF = "Professores.txt";
-    private static final String FILE_DISC = "Disciplinas.txt";
-    private static final String FILE_ALUN = "Alunos.txt";
+public class Secretaria extends Usuario{
+
+    public Secretaria(String email, String senha){
+        super(email, senha, "SECRETARIA");
+    }
+
+    private static final String FILE_PATH = "code/Java/DB/";
+    private static final String FILE_PROF = FILE_PATH + "Professores.csv";
+    private static final String FILE_DISC = FILE_PATH + "Disciplinas.csv";
+    private static final String FILE_ALUN = FILE_PATH + "Alunos.csv";
+    private static final String FILE_USU = FILE_PATH + "Usuarios.csv"; 
+
+    public static void salvarUsuario(Usuario usuario) {
+        try (FileWriter fw = new FileWriter(FILE_USU, true);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter out = new PrintWriter(bw)) {
+            out.println(usuario.getEmail() + "," + usuario.getSenha() + "," + usuario.getTipo());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void adicionarProfessor(Professor professor) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PROF, true))) {

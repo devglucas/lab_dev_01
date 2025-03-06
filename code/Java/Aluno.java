@@ -44,55 +44,43 @@ public class Aluno extends Usuario {
         this.disciplinasMatriculadas = disciplinasMatriculadas;
     }
 
-    public Aluno(String nome, Curso curso, String matricula, List<Disciplina> disciplinasMatriculadas) {
+    public Aluno(String email, String senha, String nome, Curso curso, String matricula, List<Disciplina> disciplinasMatriculadas) {
+        super(email, senha, "ALUNO");
         this.nome = nome;
         this.curso = curso;
         this.matricula = matricula;
         this.disciplinasMatriculadas = disciplinasMatriculadas;
     }
 
-    public Aluno(String nome, String matricula) {
+    public Aluno(String email, String senha, String nome, String matricula) {
+        super(email, senha, "ALUNO");
         this.nome = nome;
         this.matricula = matricula;
         this.curso = null; 
         this.disciplinasMatriculadas = new ArrayList<>(); 
     }
 
+    public Aluno(String email, String senha) {
+        super(email, senha, "ALUNO");
+    }
+
     public void solicitarMatricula(Disciplina disciplina, LocalDate data) {
         long obrigatorias = disciplinasMatriculadas.stream().filter(d -> d.getTipoDisciplina() == TIPODISCIPLINA.OBRIGATORIA).count();
         long optativas = disciplinasMatriculadas.stream().filter(d -> d.getTipoDisciplina() == TIPODISCIPLINA.OPTATIVA).count();
         
-        if (disciplina.getTipoDisciplina() == TIPODISCIPLINA.OBRIGATORIA && obrigatorias >= limObrigatorias) {
-            System.out.println("Erro: Limite de disciplinas obrigatórias atingido.");
-            return;
-        }
         
-        if (disciplina.getTipoDisciplina() == TIPODISCIPLINA.OPTATIVA && optativas >= limOptativas) {
-            System.out.println("Erro: Limite de disciplinas optativas atingido.");
-            return;
-        }
-        
-        try {
-            if (disciplina.adicionarAluno(this)) {
-                this.disciplinasMatriculadas.add(disciplina);
-                System.out.println("Matrícula na disciplina " + disciplina.getNome() + " realizada com sucesso!");
-            } else {
-                throw new IllegalStateException("A disciplina " + disciplina.getNome() + " já atingiu o limite máximo de alunos.");
-            }
-        } catch (IllegalStateException e) {
-            System.out.println("Erro ao matricular: " + e.getMessage());
-        }
     }
 
     public void solicitarCancelamento(Disciplina disciplina, LocalDate data) {
-        if (disciplinasMatriculadas.contains(disciplina)) {
-            disciplinasMatriculadas.remove(disciplina);
-            System.out.println("Cancelamento da disciplina " + disciplina.getNome() + " realizado com sucesso!");
-        } else {
-            System.out.println("Erro: O aluno não está matriculado nesta disciplina.");
-        }
+    
     }
     
-    public void realizarPagamento() {}
-    public void consultarDisciplinas(List<Disciplina> disciplinas) {}
+    public void realizarPagamento() {
+
+    }
+
+    public void consultarDisciplinas(List<Disciplina> disciplinas) {
+
+    }
+
 }

@@ -4,7 +4,11 @@ import java.util.List;
 
 class GerenteFinanceiro extends Usuario {
 
-    public double calcularValor(List<Disciplina> disciplinas) {
+    public GerenteFinanceiro(String email, String senha) {
+            super(email, senha, "GERENTE_FINANCEIRO");
+        }
+    
+        public double calcularValor(List<Disciplina> disciplinas) {
         return 0;
     }
 
