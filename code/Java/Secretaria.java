@@ -93,7 +93,7 @@ public class Secretaria extends Usuario{
         for (Disciplina disciplina : aluno.getDisciplinasMatriculadas()) {
             disciplinasStr.append(disciplina.getId()).append(";");
         }
-        writer.write(aluno.getNome() + "," + aluno.getMatricula() + "," + disciplinasStr.toString() + "\n");
+        writer.write(aluno.getEmail()  + "," + aluno.getSenha()  + "," + aluno.getNome()  + "," + aluno.getMatricula() + "," + disciplinasStr.toString() + "\n");
     } catch (IOException e) {
         System.out.println("Erro ao adicionar aluno: " + e.getMessage());
     }
@@ -121,7 +121,7 @@ public void removerAluno(String matricula) {
     }
 }
 
-   public List<Disciplina> listarDisciplinas() {
+   public static List<Disciplina> listarDisciplinas() {
     List<Disciplina> disciplinas = new ArrayList<>();
     try (BufferedReader reader = new BufferedReader(new FileReader(FILE_DISC))) {
         String linha;
@@ -180,6 +180,16 @@ public void editarAluno(String matricula, String novoNome) {
         System.out.println("Erro ao atualizar arquivo: " + e.getMessage());
     }
 }
+
+    public static Disciplina buscarDisciplinaPorId(int id) {
+        List<Disciplina> disciplinas = listarDisciplinas();
+        for (Disciplina disciplina : disciplinas) {
+            if (disciplina.getId() == id) {
+                return disciplina;
+            }
+        }
+        return null; 
+    }
 
 public void adicionarDisciplina(Disciplina disciplina) {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_DISC, true))) {

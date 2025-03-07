@@ -1,5 +1,10 @@
 package code.Java;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,13 +69,104 @@ public class Aluno extends Usuario {
         super(email, senha, "ALUNO");
     }
 
-    public void solicitarMatricula(Disciplina disciplina, LocalDate data) {
-        long obrigatorias = disciplinasMatriculadas.stream().filter(d -> d.getTipoDisciplina() == TIPODISCIPLINA.OBRIGATORIA).count();
-        long optativas = disciplinasMatriculadas.stream().filter(d -> d.getTipoDisciplina() == TIPODISCIPLINA.OPTATIVA).count();
-        
-        
+    public static Aluno buscarAlunoPorEmail(String email) {
+    String filePath = "code/Java/DB/Alunos.csv";
+    try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        String linha;
+        while ((linha = reader.readLine()) != null) {
+            String[] dados = linha.split(",");
+            if (dados[0].equals(email)) { // Verifica se o email corresponde
+                String senha = dados[1];
+                String nome = dados[2];
+                String matricula = dados[3];
+                List<Disciplina> disciplinasMatriculadas = new ArrayList<>();
+                if (dados.length > 4) {
+                    String[] disciplinasIds = dados[4].split(";");
+                    for (String id : disciplinasIds) {
+                        Disciplina disciplina = Secretaria.buscarDisciplinaPorId(Integer.parseInt(id));
+                        if (disciplina != null) {
+                            disciplinasMatriculadas.add(disciplina);
+                        }
+                    }
+                }
+                return new Aluno(email, senha, nome,null, matricula, disciplinasMatriculadas);
+            }
+        }
+    } catch (IOException e) {
+        System.out.println("Erro ao ler o arquivo de alunos: " + e.getMessage());
+    }
+    return null; // Retorna null se o aluno não for encontrado
+}
+
+    public static void listarDisciplinasDisponiveis() {
+    List<Disciplina> disciplinas = Secretaria.listarDisciplinas();
+    System.out.println("Disciplinas disponíveis:");
+    for (Disciplina disciplina : disciplinas) {
+        System.out.println("ID: " + disciplina.getId() + " - " + disciplina.getNome() + " (" + disciplina.getTipoDisciplina() + ")");
+    }
+}
+
+private void atualizarCSVAluno() {
+    String filePath = "code/Java/DB/Alunos.csv";
+    List<String> linhas = new ArrayList<>();
+
+    try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        String linha;
+        while ((linha = reader.readLine()) != null) {
+            if (linha.contains(this.getEmail())) {
+                StringBuilder disciplinasStr = new StringBuilder();
+                for (Disciplina disciplina : disciplinasMatriculadas) {
+                    disciplinasStr.append(disciplina.getId()).append(";");
+                }
+                if (disciplinasStr.length() > 0) {
+                    disciplinasStr.deleteCharAt(disciplinasStr.length() - 1); 
+                }
+                linha = this.getNome() + "," + this.getMatricula() + "," + this.getEmail() + "," + this.getSenha() + "," + disciplinasStr.toString();
+            }
+            linhas.add(linha);
+        }
+    } catch (IOException e) {
+        System.out.println("Erro ao ler o arquivo de alunos: " + e.getMessage());
+        return;
     }
 
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+        for (String linha : linhas) {
+            writer.write(linha + "\n");
+        }
+    } catch (IOException e) {
+        System.out.println("Erro ao atualizar o arquivo de alunos: " + e.getMessage());
+    }
+}
+
+   public void solicitarMatricula(Disciplina disciplina) {
+    if (disciplinasMatriculadas.contains(disciplina)) {
+        System.out.println("Você já está matriculado nesta disciplina.");
+        return;
+    }
+
+    long obrigatorias = disciplinasMatriculadas.stream()
+            .filter(d -> d.getTipoDisciplina() == TIPODISCIPLINA.OBRIGATORIA)
+            .count();
+    long optativas = disciplinasMatriculadas.stream()
+            .filter(d -> d.getTipoDisciplina() == TIPODISCIPLINA.OPTATIVA)
+            .count();
+
+    if (disciplina.getTipoDisciplina() == TIPODISCIPLINA.OBRIGATORIA && obrigatorias >= limObrigatorias) {
+        System.out.println("Limite de disciplinas obrigatórias atingido.");
+        return;
+    }
+
+    if (disciplina.getTipoDisciplina() == TIPODISCIPLINA.OPTATIVA && optativas >= limOptativas) {
+        System.out.println("Limite de disciplinas optativas atingido.");
+        return;
+    }
+
+    disciplinasMatriculadas.add(disciplina);
+    System.out.println("Matrícula na disciplina " + disciplina.getNome() + " realizada com sucesso.");
+
+    atualizarCSVAluno();
+}
     public void solicitarCancelamento(Disciplina disciplina, LocalDate data) {
     
     }

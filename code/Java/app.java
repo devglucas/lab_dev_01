@@ -18,8 +18,60 @@ public class app {
         }
 
         if (usuario.getTipo().equals("ALUNO")) {
-            // Lógica do usuário aluno aqui junto com seu switch e ETC
+    Aluno aluno = Aluno.buscarAlunoPorEmail(usuario.getEmail());
+    int opcao = -1;
+    do {
+        System.out.println("\n=== Sistema do Aluno ===");
+        System.out.println("1. Solicitar Matrícula");
+        System.out.println("2. Ver Disciplinas Matriculadas");
+        System.out.println("0. Sair");
+        System.out.print("Escolha uma opção: ");
+
+        if (scanner.hasNextInt()) {
+            opcao = scanner.nextInt();
+            scanner.nextLine(); // Limpa o buffer
+        } else {
+            System.out.println("Entrada inválida! Digite um número.");
+            scanner.next(); 
+            continue;
         }
+
+        switch (opcao) {
+            case 1:
+                System.out.println("Disciplinas disponíveis:");
+                List<Disciplina> disciplinasDisponiveis = Secretaria.listarDisciplinas();
+                for (Disciplina disciplina : disciplinasDisponiveis) {
+                    System.out.println("ID: " + disciplina.getId() + " - " + disciplina.getNome() + " (" + disciplina.getTipoDisciplina() + ")");
+                }
+
+                System.out.print("Digite o ID da disciplina que deseja se matricular: ");
+                int idDisciplina = scanner.nextInt();
+                scanner.nextLine();
+                Disciplina disciplina = Secretaria.buscarDisciplinaPorId(idDisciplina);
+                if (disciplina == null) {
+                    System.out.println("Disciplina não encontrada.");
+                } else {
+                    aluno.solicitarMatricula(disciplina);
+                }
+                break;
+            case 2:
+                System.out.println("Disciplinas matriculadas:");
+                if(aluno.getDisciplinasMatriculadas() == null){
+                        throw new IllegalArgumentException("O aluno nao possui nenhuma disciplina matriculada.");
+                }
+
+                for (Disciplina disciplinaMatriculada : aluno.getDisciplinasMatriculadas()) {
+                    System.out.println("ID: " + disciplinaMatriculada.getId() + " - " + disciplinaMatriculada.getNome() + " (" + disciplinaMatriculada.getTipoDisciplina() + ")");
+                }
+                break;
+            case 0:
+                System.out.println("Encerrando a aplicação.");
+                break;
+            default:
+                System.out.println("Opção inválida, tente novamente.");
+        }
+    } while (opcao != 0);
+}
 
         if (usuario.getTipo().equals("PROFESSOR")) {
             Professor professor = new Professor(usuario.getEmail(), usuario.getSenha());
@@ -117,7 +169,7 @@ public class app {
                     String senhaAlun = scanner.nextLine();
 
                     System.out.println("Disciplinas disponíveis:");
-                    List<Disciplina> disciplinasDisponiveis = secretaria.listarDisciplinas();
+                    List<Disciplina> disciplinasDisponiveis = Secretaria.listarDisciplinas();
                     for (Disciplina disciplina : disciplinasDisponiveis) {
                         System.out.println("ID: " + disciplina.getId() + " - " + disciplina.getNome());
                     }
@@ -139,7 +191,6 @@ public class app {
                         }
                     }
 
-                    // Criar o aluno com as disciplinas selecionadas
                     Aluno aluno = new Aluno(emailAlun, senhaAlun, nomeAluno, idAluno);
                     aluno.setDisciplinasMatriculadas(disciplinasSelecionadas);
 
