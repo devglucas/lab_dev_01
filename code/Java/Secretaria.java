@@ -21,15 +21,15 @@ public class Secretaria extends Usuario{
     private static final String FILE_ALUN = FILE_PATH + "Alunos.csv";
     private static final String FILE_USU = FILE_PATH + "Usuarios.csv"; 
 
-    public static void salvarUsuario(Usuario usuario) {
-        try (FileWriter fw = new FileWriter(FILE_USU, true);
-             BufferedWriter bw = new BufferedWriter(fw);
-             PrintWriter out = new PrintWriter(bw)) {
-            out.println(usuario.getEmail() + "," + usuario.getSenha() + "," + usuario.getTipo());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+   public static void salvarUsuario(Usuario usuario) {
+    try (FileWriter fw = new FileWriter(FILE_USU, true);
+         BufferedWriter bw = new BufferedWriter(fw);
+         PrintWriter out = new PrintWriter(bw)) {
+        out.println(usuario.getEmail() + "," + usuario.getSenha() + "," + usuario.getTipo());
+    } catch (IOException e) {
+        e.printStackTrace();
     }
+}
 
     public void adicionarProfessor(Professor professor) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PROF, true))) {
@@ -86,14 +86,16 @@ public class Secretaria extends Usuario{
     }
     
     public void adicionarAluno(Aluno aluno) {
-    if (aluno.getCurso() == null) { 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_ALUN, true))) {
-            writer.write(aluno.getNome() + "," + aluno.getMatricula() + "\n");
-        } catch (IOException e) {
-            System.out.println("Erro ao adicionar aluno: " + e.getMessage());
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_ALUN, true))) {
+
+        StringBuilder disciplinasStr = new StringBuilder();
+
+        for (Disciplina disciplina : aluno.getDisciplinasMatriculadas()) {
+            disciplinasStr.append(disciplina.getId()).append(";");
         }
-    } else {
-        System.out.println("Aluno já está matriculado em um curso e não pode ser registrado.");
+        writer.write(aluno.getNome() + "," + aluno.getMatricula() + "," + disciplinasStr.toString() + "\n");
+    } catch (IOException e) {
+        System.out.println("Erro ao adicionar aluno: " + e.getMessage());
     }
 }
 
@@ -117,6 +119,42 @@ public void removerAluno(String matricula) {
     } catch (IOException e) {
         System.out.println("Erro ao atualizar arquivo: " + e.getMessage());
     }
+}
+
+   public List<Disciplina> listarDisciplinas() {
+    List<Disciplina> disciplinas = new ArrayList<>();
+    try (BufferedReader reader = new BufferedReader(new FileReader(FILE_DISC))) {
+        String linha;
+        boolean primeiraLinha = true; // Flag para pular o cabeçalho
+        while ((linha = reader.readLine()) != null) {
+            if (primeiraLinha) {
+                primeiraLinha = false; // Pula a primeira linha (cabeçalho)
+                continue;
+            }
+
+            String[] dados = linha.split(",");
+            
+            // Verifica se a linha tem o número correto de campos
+            if (dados.length >= 4) { // Verifica se há pelo menos 4 campos
+                try {
+                    int id = Integer.parseInt(dados[1].trim());
+                    String nome = dados[0].trim();
+                    int credito = Integer.parseInt(dados[2].trim());
+                    TIPODISCIPLINA tipo = TIPODISCIPLINA.valueOf(dados[3].trim());
+                    disciplinas.add(new Disciplina(nome, id, credito, tipo, new ArrayList<>()));
+                } catch (NumberFormatException e) {
+                    System.out.println("Erro ao converter número na linha: " + linha);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Tipo de disciplina inválido na linha: " + linha);
+                }
+            } else {
+                System.out.println("Linha inválida no arquivo de disciplinas: " + linha);
+            }
+        }
+    } catch (IOException e) {
+        System.out.println("Erro ao ler disciplinas: " + e.getMessage());
+    }
+    return disciplinas;
 }
 
 public void editarAluno(String matricula, String novoNome) {

@@ -6,7 +6,6 @@ public class Disciplina {
     private String nome;
     private int id;
     private int credito;
-    private int quantAlunos;
     private boolean estaDisponivel;
     private static final int limCima = 60;
     private static final int limBaixo = 3;
@@ -27,14 +26,6 @@ public class Disciplina {
 
     public void setCredito(int credito) {
         this.credito = credito;
-    }
-
-    public int getQuantAlunos() {
-        return quantAlunos;
-    }
-
-    public void setQuantAlunos(int quantAlunos) {
-        this.quantAlunos = quantAlunos;
     }
 
     public boolean isEstaDisponivel() {
@@ -61,29 +52,21 @@ public class Disciplina {
         this.alunosMatriculados = alunosMatriculados;
     }
 
-    public boolean adicionarAluno(Aluno aluno) {
-        if (quantAlunos < limCima) {
-            alunosMatriculados.add(aluno);
-            quantAlunos++;
-            estaDisponivel = quantAlunos >= limBaixo;
-            return true;
-        }
-        return false;
+    public void adicionarAluno(Aluno aluno) {
+        alunosMatriculados.add(aluno);
     }
 
-    public Disciplina(String nome, int id, int credito, int quantAlunos, TIPODISCIPLINA tipoDisciplina, List<Aluno> alunosMatriculados) {
+    public Disciplina(String nome, int id, int credito, TIPODISCIPLINA tipoDisciplina, List<Aluno> alunosMatriculados) {
         
-        if (quantAlunos <= limBaixo || quantAlunos >= limCima) {
-            throw new IllegalArgumentException("A quantidade de alunos deve estar entre " + limBaixo + " e " + limCima + ".");
+        if(alunosMatriculados.size() > limCima && alunosMatriculados.size() < limBaixo){
+            throw new IllegalStateException("limite de alunos estourado");
         }
 
         this.nome = nome;
         this.id = id;
         this.credito = credito;
-        this.quantAlunos = quantAlunos;
         this.tipoDisciplina = tipoDisciplina;
         this.alunosMatriculados = alunosMatriculados;
-        this.estaDisponivel = quantAlunos >= limBaixo;
     }
 
     public int getId() {
