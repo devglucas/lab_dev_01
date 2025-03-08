@@ -139,22 +139,33 @@ public class Aluno extends Usuario {
     }
 
     public void cancelarMatricula(Disciplina disciplina) {
+        if (disciplinasMatriculadas == null || disciplinasMatriculadas.isEmpty()) {
+            System.out.println("Você não está matriculado em nenhuma disciplina.");
+            return;
+        }
+    
         if (!disciplinasMatriculadas.contains(disciplina)) {
             System.out.println("Você não está matriculado nesta disciplina.");
             return;
         }
-
+    
+        // Remove a disciplina da lista de disciplinas matriculadas do aluno
         disciplinasMatriculadas.remove(disciplina);
-        System.out.println("Matrícula na disciplina " + disciplina.getNome() + " cancelada com sucesso.");
-
+    
+        // Remove o aluno da lista de alunos matriculados na disciplina
+        disciplina.removerAluno(this);
+    
+        // Atualiza a disciplina no CSV
+        Secretaria.atualizarDisciplinaNoCSV(disciplina);
+    
+        // Atualiza o aluno no CSV
         Secretaria.atualizarAlunoNoCSV(this);
+    
+        System.out.println("Matrícula na disciplina " + disciplina.getNome() + " cancelada com sucesso.");
     }
 
     public void realizarPagamento() {
         // Implementação do método de pagamento
     }
 
-    public void consultarDisciplinas(List<Disciplina> disciplinas) {
-        // Implementação do método de consulta de disciplinas
-    }
 }
