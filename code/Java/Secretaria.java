@@ -33,9 +33,76 @@ public class Secretaria extends Usuario{
 
     public void adicionarProfessor(Professor professor) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PROF, true))) {
-            writer.write(professor.getNome() + "," + professor.getMatricula() + "\n");
+            writer.write(professor.getNome() + "," + professor.getMatricula() + "," + professor.getEmail() + "," + professor.getSenha() + "\n");
         } catch (IOException e) {
             System.out.println("Erro ao adicionar professor: " + e.getMessage());
+        }
+    }
+    
+    // ADICIONA DISCIPLINA AO PROF!!!!!!
+    // ADICIONA DISCIPLINA AO PROF!!!!!!
+    // ADICIONA DISCIPLINA AO PROF!!!!!!
+    // ADICIONA DISCIPLINA AO PROF!!!!!!
+    // ADICIONA DISCIPLINA AO PROF!!!!!!
+    // ADICIONA DISCIPLINA AO PROF!!!!!!
+    // ADICIONA DISCIPLINA AO PROF!!!!!!
+
+    public void adicionarDisciplinaAoProfessor(String matricula, int idDisciplina) {
+        Disciplina disciplina = buscarDisciplinaPorId(idDisciplina);
+        if (disciplina == null) {
+            System.out.println("Disciplina não encontrada.");
+            return;
+        }
+    
+        List<String> linhasAtualizadas = new ArrayList<>();
+        boolean professorEncontrado = false;
+    
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PROF))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                String[] dados = linha.split(",");
+                if (dados.length >= 4 && dados[3].equals(matricula)) { 
+                    professorEncontrado = true;
+                    Professor professor = new Professor(dados[0], dados[1], dados[2], dados[3]);
+    
+                    if (dados.length > 4 && !dados[4].isEmpty()) {
+                        String[] idsDisciplinas = dados[4].split(";");
+                        for (String id : idsDisciplinas) {
+                            int idDisciplinaExistente = Integer.parseInt(id.trim());
+                            Disciplina disciplinaExistente = buscarDisciplinaPorId(idDisciplinaExistente);
+                            if (disciplinaExistente != null) {
+                                professor.adicionarDisciplina(disciplinaExistente);
+                            }
+                        }
+                    }
+    
+                    if (professor.getDisciplinas().stream().anyMatch(d -> d.getId() == idDisciplina)) {
+                        System.out.println("O professor já possui essa disciplina.");
+                        return; 
+                    }
+    
+                    professor.adicionarDisciplina(disciplina);
+                    linha = professor.toString();
+                }
+                linhasAtualizadas.add(linha);
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao ler arquivo: " + e.getMessage());
+            return;
+        }
+    
+        if (!professorEncontrado) {
+            System.out.println("Professor com matrícula " + matricula + " não encontrado.");
+            return;
+        }
+    
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PROF))) {
+            for (String linha : linhasAtualizadas) {
+                writer.write(linha + "\n");
+            }
+            System.out.println("Disciplina adicionada ao professor com sucesso.");
+        } catch (IOException e) {
+            System.out.println("Erro ao atualizar arquivo: " + e.getMessage());
         }
     }
 
@@ -125,17 +192,16 @@ public void removerAluno(String matricula) {
     List<Disciplina> disciplinas = new ArrayList<>();
     try (BufferedReader reader = new BufferedReader(new FileReader(FILE_DISC))) {
         String linha;
-        boolean primeiraLinha = true; // Flag para pular o cabeçalho
+        boolean primeiraLinha = true; 
         while ((linha = reader.readLine()) != null) {
             if (primeiraLinha) {
-                primeiraLinha = false; // Pula a primeira linha (cabeçalho)
+                primeiraLinha = false; 
                 continue;
             }
 
             String[] dados = linha.split(",");
             
-            // Verifica se a linha tem o número correto de campos
-            if (dados.length >= 4) { // Verifica se há pelo menos 4 campos
+            if (dados.length >= 4) { 
                 try {
                     int id = Integer.parseInt(dados[1].trim());
                     String nome = dados[0].trim();
@@ -246,55 +312,11 @@ public void editarDisciplina(int id, String novoNome, int novoCredito) {
 }
     
     public void cancelarDisciplina(Disciplina disciplina) {
-        // Implementação 
+        
     }
     
     public void gerarCurriculo() {
-    String nomeArquivo = "Curriculo.txt";
-
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomeArquivo))) {
-        writer.write("===== CURRÍCULO DA INSTITUIÇÃO =====\n\n");
-
-        // Adicionando Professores
-        writer.write(">>> PROFESSORES:\n");
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PROF))) {
-            String linha;
-            while ((linha = reader.readLine()) != null) {
-                writer.write("- " + linha + "\n");
-            }
-        } catch (IOException e) {
-            writer.write("Erro ao ler professores: " + e.getMessage() + "\n");
-        }
-        writer.write("\n");
-
-        // Adicionando Alunos
-        writer.write(">>> ALUNOS:\n");
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_ALUN))) {
-            String linha;
-            while ((linha = reader.readLine()) != null) {
-                writer.write("- " + linha + "\n");
-            }
-        } catch (IOException e) {
-            writer.write("Erro ao ler alunos: " + e.getMessage() + "\n");
-        }
-        writer.write("\n");
-
-        // Adicionando Disciplinas
-        writer.write(">>> DISCIPLINAS:\n");
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_DISC))) {
-            String linha;
-            while ((linha = reader.readLine()) != null) {
-                writer.write("- " + linha + "\n");
-            }
-        } catch (IOException e) {
-            writer.write("Erro ao ler disciplinas: " + e.getMessage() + "\n");
-        }
-
-        System.out.println("Currículo gerado com sucesso no arquivo: " + nomeArquivo);
-
-    } catch (IOException e) {
-        System.out.println("Erro ao gerar currículo: " + e.getMessage());
+    
     }
-}
 
 }

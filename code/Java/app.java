@@ -29,7 +29,7 @@ public class app {
 
         if (scanner.hasNextInt()) {
             opcao = scanner.nextInt();
-            scanner.nextLine(); // Limpa o buffer
+            scanner.nextLine(); 
         } else {
             System.out.println("Entrada inválida! Digite um número.");
             scanner.next(); 
@@ -112,15 +112,16 @@ public class app {
             do {
                 System.out.println("\n=== Sistema de Gestão ===");
                 System.out.println("1. Adicionar Professor");
-                System.out.println("2. Editar Professor");
-                System.out.println("3. Remover Professor");
-                System.out.println("4. Adicionar Aluno");
-                System.out.println("5. Editar Aluno");
-                System.out.println("6. Remover Aluno");
-                System.out.println("7. Adicionar Disciplina");
-                System.out.println("8. Editar Disciplina");
-                System.out.println("9. Remover Disciplina");
-                System.out.println("10. Gerar Currículo");
+                System.out.println("2. Adicionar Disciplina a Professor");
+                System.out.println("3. Editar Professor");
+                System.out.println("4. Remover Professor");
+                System.out.println("5. Adicionar Aluno");
+                System.out.println("6. Editar Aluno");
+                System.out.println("7. Remover Aluno");
+                System.out.println("8. Adicionar Disciplina");
+                System.out.println("9. Editar Disciplina");
+                System.out.println("10. Remover Disciplina");
+                System.out.println("11. Gerar Currículo");
                 System.out.println("0. Sair");
                 System.out.print("Escolha uma opção: ");
 
@@ -137,28 +138,46 @@ public class app {
                     case 1:
                         System.out.print("Nome do professor: ");
                         String nomeProf = scanner.nextLine();
-                        System.out.print("ID do professor: ");
-                        String idProf = scanner.nextLine();
+                        System.out.print("Matricula do professor: ");
+                        String idMatProf = scanner.nextLine();
                         System.out.print("Email do professor: ");
                         String emailProf = scanner.nextLine();
                         System.out.print("Senha do professor: ");
                         String senhaProf = scanner.nextLine();
-                        secretaria.adicionarProfessor(new Professor(emailProf, senhaProf, nomeProf, idProf));
+                        secretaria.adicionarProfessor(new Professor(emailProf, senhaProf, nomeProf, idMatProf));
                         Secretaria.salvarUsuario(new Usuario(emailProf, senhaProf, "PROFESSOR"));
                         break;
-                    case 2:
+
+                        case 2:
+                        System.out.println("Disciplinas disponíveis:");
+                        List<Disciplina> disciplinasDisponiveis = Secretaria.listarDisciplinas();
+                        for (Disciplina disciplina : disciplinasDisponiveis) {
+                            System.out.println("ID: " + disciplina.getId() + " - " + disciplina.getNome());
+                        }
+                        System.out.print("Matrícula do professor: ");
+                        String matriculaProf = scanner.nextLine();
+                        System.out.print("ID da disciplina a adicionar: ");
+                        int idDisciplinaProf = scanner.nextInt();
+
+                        scanner.nextLine(); 
+                        secretaria.adicionarDisciplinaAoProfessor(matriculaProf, idDisciplinaProf);
+                        break;
+
+                    case 3:
                         System.out.print("ID do professor a editar: ");
                         String idProfEdit = scanner.nextLine();
                         System.out.print("Novo nome: ");
                         String novoNomeProf = scanner.nextLine();
                         secretaria.editarProfessor(idProfEdit, novoNomeProf);
                         break;
-                    case 3:
+
+                    case 4:
                         System.out.print("ID do professor a remover: ");
                         String idProfRemover = scanner.nextLine();
                         secretaria.removerProfessor(idProfRemover);
                         break;
-                                    case 4:
+
+                    case 5:
                     System.out.print("Nome do aluno: ");
                     String nomeAluno = scanner.nextLine();
                     System.out.print("ID do aluno: ");
@@ -169,8 +188,8 @@ public class app {
                     String senhaAlun = scanner.nextLine();
 
                     System.out.println("Disciplinas disponíveis:");
-                    List<Disciplina> disciplinasDisponiveis = Secretaria.listarDisciplinas();
-                    for (Disciplina disciplina : disciplinasDisponiveis) {
+                    List<Disciplina> disciplinasDisponiveis2 = Secretaria.listarDisciplinas();
+                    for (Disciplina disciplina : disciplinasDisponiveis2) {
                         System.out.println("ID: " + disciplina.getId() + " - " + disciplina.getNome());
                     }
 
@@ -180,7 +199,7 @@ public class app {
                     String[] ids = idsDisciplinas.split(",");
                     for (String id : ids) {
                         int idDisciplina = Integer.parseInt(id.trim());
-                        Disciplina disciplinaSelecionada = disciplinasDisponiveis.stream()
+                        Disciplina disciplinaSelecionada = disciplinasDisponiveis2.stream()
                                 .filter(d -> d.getId() == idDisciplina)
                                 .findFirst()
                                 .orElse(null);
@@ -194,23 +213,23 @@ public class app {
                     Aluno aluno = new Aluno(emailAlun, senhaAlun, nomeAluno, idAluno);
                     aluno.setDisciplinasMatriculadas(disciplinasSelecionadas);
 
-                    // Adicionar o aluno ao banco de dados
                     secretaria.adicionarAluno(aluno);
                     Secretaria.salvarUsuario(new Usuario(emailAlun, senhaAlun, "ALUNO"));
                     break;
-                    case 5:
+
+                    case 6:
                         System.out.print("ID do aluno a editar: ");
                         String idAlunoEdit = scanner.nextLine();
                         System.out.print("Novo nome: ");
                         String novoNomeAluno = scanner.nextLine();
                         secretaria.editarAluno(idAlunoEdit, novoNomeAluno);
                         break;
-                    case 6:
+                    case 7:
                         System.out.print("ID do aluno a remover: ");
                         String idAlunoRemover = scanner.nextLine();
                         secretaria.removerAluno(idAlunoRemover);
                         break;
-                    case 7:
+                    case 8:
                         System.out.print("Nome da disciplina: ");
                         String nomeDisciplina = scanner.nextLine();
                         System.out.print("ID da disciplina: ");
@@ -231,7 +250,7 @@ public class app {
                         List<Aluno> alunosMatriculados = new ArrayList<>();
                         secretaria.adicionarDisciplina(new Disciplina(nomeDisciplina, idDisciplina, credito, tipoDisciplina, alunosMatriculados));
                         break;
-                    case 8:
+                    case 9:
                         System.out.print("ID da disciplina a editar: ");
                         int idDisciplinaEdit = scanner.nextInt();
                         scanner.nextLine(); // Limpa o buffer
@@ -242,13 +261,13 @@ public class app {
                         scanner.nextLine(); // Limpa o buffer
                         secretaria.editarDisciplina(idDisciplinaEdit, novoNomeDisciplina, novoCredito);
                         break;
-                    case 9:
+                    case 10:
                         System.out.print("ID da disciplina a remover: ");
                         int idDisciplinaRemover = scanner.nextInt();
                         scanner.nextLine(); // Limpa o buffer
                         secretaria.removerDisciplina(idDisciplinaRemover);
                         break;
-                    case 10:
+                    case 11:
                         System.out.println("Gerando currículo...");
                         secretaria.gerarCurriculo();
                         System.out.println("Currículo gerado em formato txt.");

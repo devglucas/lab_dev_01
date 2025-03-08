@@ -1,4 +1,2 @@
-email,senha
-jorge@gmail,12345
-jgfalante,12345
-alemao2,1234
+nome,matricula,email,senha,idsDisciplinas
+teste,123,teste@,123,103;101;102

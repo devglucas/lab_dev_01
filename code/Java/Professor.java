@@ -6,20 +6,13 @@ import java.util.List;
 public class Professor extends Usuario {
     private String nome;
     private String matricula;
-    private List<Disciplina> disciplinasMinistradas;
+    private List<Disciplina> disciplinas; 
 
-    public Professor(String nome, String matricula, String email, String senha, List<Disciplina> disciplinasMinistradas) {
+    public Professor(String email, String senha, String nome, String matricula) {
         super(email, senha, "PROFESSOR");
         this.nome = nome;
         this.matricula = matricula;
-        this.disciplinasMinistradas = disciplinasMinistradas;
-    }
-
-    public Professor(String nome, String matricula, String email, String senha) {
-        super(email, senha, "PROFESSOR"); 
-        this.nome = nome;
-        this.matricula = matricula;
-        this.disciplinasMinistradas = new ArrayList<>();
+        this.disciplinas = new ArrayList<>();
     }
 
     public Professor(String email, String senha) {
@@ -27,14 +20,28 @@ public class Professor extends Usuario {
     }
 
     public String getNome() {
-        return this.nome;
+        return nome;
     }
 
     public String getMatricula() {
-        return this.matricula;
+        return matricula;
     }
 
-    public void consultarAlunosMatriculados(Disciplina disciplina) {
-        // Implementação do método para consultar alunos matriculados
+    public List<Disciplina> getDisciplinas() {
+        return disciplinas;
     }
+
+    public void adicionarDisciplina(Disciplina disciplina) {
+        this.disciplinas.add(disciplina);
+    }
+
+    //BGL PRA ESCREVER NO ARQUIVO CSV SE NAO VAI O OBJETO INTEIRO
+    @Override
+public String toString() {
+    String idsDisciplinas = disciplinas.stream()
+            .map(disciplina -> String.valueOf(disciplina.getId()))
+            .reduce((id1, id2) -> id1 + ";" + id2)
+            .orElse("");
+    return getEmail() + "," + getSenha() + "," + nome + "," + matricula + "," + idsDisciplinas;
+}
 }
