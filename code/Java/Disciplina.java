@@ -44,38 +44,48 @@ public class Disciplina {
         this.tipoDisciplina = tipoDisciplina;
     }
 
+    public void setAlunosMatriculados(List<Aluno> alunosMatriculados) {
+        this.alunosMatriculados = alunosMatriculados;
+        this.verificarDisponibilidade();
+    }
+
+    public void adicionarAluno(Aluno aluno) {
+        if (alunosMatriculados.size() < limCima) {
+            alunosMatriculados.add(aluno);
+            this.verificarDisponibilidade();
+        } else {
+            throw new IllegalStateException("Limite máximo de alunos atingido para esta disciplina.");
+        }
+    }
+
+    public void removerAluno(Aluno aluno) {
+        alunosMatriculados.remove(aluno);
+        this.verificarDisponibilidade();
+    }
+
+    public boolean verificarDisponibilidade() {
+        int numAlunos = alunosMatriculados.size();
+        estaDisponivel = numAlunos >= limBaixo && numAlunos <= limCima;
+        return estaDisponivel;
+    }
+
     public List<Aluno> getAlunosMatriculados() {
         return alunosMatriculados;
     }
 
-    public void setAlunosMatriculados(List<Aluno> alunosMatriculados) {
-        this.alunosMatriculados = alunosMatriculados;
-    }
-
-    public void adicionarAluno(Aluno aluno) {
-        alunosMatriculados.add(aluno);
-    }
-
     public Disciplina(String nome, int id, int credito, TIPODISCIPLINA tipoDisciplina, List<Aluno> alunosMatriculados) {
-        
-        if(alunosMatriculados.size() > limCima && alunosMatriculados.size() < limBaixo){
-            throw new IllegalStateException("limite de alunos estourado");
-        }
-
         this.nome = nome;
         this.id = id;
         this.credito = credito;
         this.tipoDisciplina = tipoDisciplina;
         this.alunosMatriculados = alunosMatriculados;
+        this.verificarDisponibilidade();
     }
 
     public int getId() {
         return id;
     }
 
-    public boolean verificarDisponibilidade() {
-        return estaDisponivel; 
-    }
     
     public void gerarCurriculo() {}
 }

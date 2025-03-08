@@ -22,8 +22,9 @@ public class app {
     int opcao = -1;
     do {
         System.out.println("\n=== Sistema do Aluno ===");
-        System.out.println("1. Solicitar Matrícula");
-        System.out.println("2. Ver Disciplinas Matriculadas");
+        System.out.println("1. Solicitar matrícula");
+        System.out.println("2. Solicitar cancelamento de matrícula");
+        System.out.println("3. Ver Disciplinas Matriculadas");
         System.out.println("0. Sair");
         System.out.print("Escolha uma opção: ");
 
@@ -54,7 +55,28 @@ public class app {
                     aluno.solicitarMatricula(disciplina);
                 }
                 break;
-            case 2:
+
+                case 2:
+                System.out.println("Disciplinas disponíveis para o cancelamento:");
+                if (aluno.getDisciplinasMatriculadas() == null || aluno.getDisciplinasMatriculadas().isEmpty()) {
+                    System.out.println("Você não está matriculado em nenhuma disciplina.");
+                } else {
+                    for (Disciplina disciplinaMatriculada : aluno.getDisciplinasMatriculadas()) {
+                        System.out.println("ID: " + disciplinaMatriculada.getId() + " - " + disciplinaMatriculada.getNome() + " (" + disciplinaMatriculada.getTipoDisciplina() + ")");
+                    }
+            
+                    System.out.print("Digite o ID da disciplina que deseja cancelar: ");
+                    int idDisciplinaParaCancelar = scanner.nextInt();
+                    scanner.nextLine(); // Limpa o buffer
+                    Disciplina disciplinaParaCancelar = Secretaria.buscarDisciplinaPorId(idDisciplinaParaCancelar);
+                    if (disciplinaParaCancelar == null) {
+                        System.out.println("Disciplina não encontrada.");
+                    } else {
+                        aluno.cancelarMatricula(disciplinaParaCancelar);
+                    }
+                }
+                break;
+            case 3:
                 System.out.println("Disciplinas matriculadas:");
                 if(aluno.getDisciplinasMatriculadas() == null){
                         throw new IllegalArgumentException("O aluno nao possui nenhuma disciplina matriculada.");
@@ -130,10 +152,10 @@ public class app {
 
                 if (scanner.hasNextInt()) {
                     opcao = scanner.nextInt();
-                    scanner.nextLine(); // Limpa o buffer do Scanner
+                    scanner.nextLine();
                 } else {
                     System.out.println("Entrada inválida! Digite um número.");
-                    scanner.next(); // Descarta entrada inválida
+                    scanner.next();
                     continue;
                 }
 
@@ -286,7 +308,7 @@ public class app {
 
 
                     case 11:
-                        ///dsadas
+                        ///parte de gerar curriculo baseado no id do aluno
                         break;
 
 
@@ -319,8 +341,7 @@ public class app {
                                 System.out.println("Disciplina com ID " + idDisciplinaCurso + " não encontrada.");
                             }
                         }
-                    
-                        // Adicionar o curso
+
                         secretaria.adicionarCurso(new Curso(nomeCurso, creditosNecessarios, disciplinasSelecionadasCurso));
                         break;
                     

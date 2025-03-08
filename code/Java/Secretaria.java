@@ -21,6 +21,7 @@ public class Secretaria extends Usuario{
     private static final String FILE_ALUN = FILE_PATH + "Alunos.csv";
     private static final String FILE_USU = FILE_PATH + "Usuarios.csv";
     private static final String FILE_CURSO = FILE_PATH + "Cursos.csv"; 
+    private static final String FILE_NOTA = FILE_PATH + "NotaFiscal.csv"; 
 
    public static void salvarUsuario(Usuario usuario) {
     try (FileWriter fw = new FileWriter(FILE_USU, true);
@@ -152,6 +153,48 @@ public class Secretaria extends Usuario{
             System.out.println("Erro ao atualizar arquivo: " + e.getMessage());
         }
     }
+
+    //Atualiza de acordo com oq a classe aluno quiser
+    public static void atualizarAlunoNoCSV(Aluno aluno) {
+        String filePath = FILE_ALUN;
+        List<String> linhas = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String linha;
+            boolean primeiraLinha = true; 
+            while ((linha = reader.readLine()) != null) {
+                if (primeiraLinha) {
+                    primeiraLinha = false; 
+                    linhas.add(linha); 
+                    continue;
+                }
+
+                if (linha.contains(aluno.getEmail())) {
+                    StringBuilder disciplinasStr = new StringBuilder();
+                    for (Disciplina disciplina : aluno.getDisciplinasMatriculadas()) {
+                        disciplinasStr.append(disciplina.getId()).append(";");
+                    }
+                    if (disciplinasStr.length() > 0) {
+                        disciplinasStr.deleteCharAt(disciplinasStr.length() - 1);
+                    }
+                    linha = aluno.getEmail() + "," + aluno.getSenha() + "," + aluno.getNome() + "," + aluno.getMatricula()
+                            + "," + disciplinasStr.toString();
+                }
+                linhas.add(linha);
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao ler o arquivo de alunos: " + e.getMessage());
+            return;
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            for (String linha : linhas) {
+                writer.write(linha + "\n");
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao atualizar o arquivo de alunos: " + e.getMessage());
+        }
+    }
+
     
     public void adicionarAluno(Aluno aluno) {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_ALUN, true))) {
@@ -259,13 +302,61 @@ public void editarAluno(String matricula, String novoNome) {
         return null; 
     }
 
-public void adicionarDisciplina(Disciplina disciplina) {
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_DISC, true))) {
-        writer.write(disciplina.getNome() + "," + disciplina.getId() + "," + disciplina.getCredito() + "\n");
-    } catch (IOException e) {
-        System.out.println("Erro ao adicionar disciplina: " + e.getMessage());
+    public void adicionarDisciplina(Disciplina disciplina) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_DISC, true))) {
+            StringBuilder alunosStr = new StringBuilder();
+            for (Aluno aluno : disciplina.getAlunosMatriculados()) {
+                alunosStr.append(aluno.getMatricula()).append(";"); // Usa o ID do aluno (matrícula)
+            }
+            if (alunosStr.length() > 0) {
+                alunosStr.deleteCharAt(alunosStr.length() - 1);
+            }
+            writer.write(disciplina.getNome() + "," + disciplina.getId() + "," + disciplina.getCredito() + "," +
+                    disciplina.getTipoDisciplina() + "," + disciplina.isEstaDisponivel() + "," + alunosStr.toString() + "\n");
+        } catch (IOException e) {
+            System.out.println("Erro ao adicionar disciplina: " + e.getMessage());
+        }
     }
-}
+
+    public static void atualizarDisciplinaNoCSV(Disciplina disciplina) {
+        List<String> linhas = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_DISC))) {
+            String linha;
+            boolean primeiraLinha = true; 
+            while ((linha = reader.readLine()) != null) {
+                if (primeiraLinha) {
+                    primeiraLinha = false; 
+                    linhas.add(linha); 
+                    continue;
+                }
+    
+                String[] dados = linha.split(",");
+                if (dados.length > 1 && Integer.parseInt(dados[1].trim()) == disciplina.getId()) {
+                    StringBuilder alunosStr = new StringBuilder();
+                    for (Aluno aluno : disciplina.getAlunosMatriculados()) {
+                        alunosStr.append(aluno.getMatricula()).append(";"); 
+                    }
+                    if (alunosStr.length() > 0) {
+                        alunosStr.deleteCharAt(alunosStr.length() - 1);
+                    }
+                    linha = disciplina.getNome() + "," + disciplina.getId() + "," + disciplina.getCredito() + "," +
+                            disciplina.getTipoDisciplina() + "," + disciplina.isEstaDisponivel() + "," + alunosStr.toString();
+                }
+                linhas.add(linha);
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao ler o arquivo de disciplinas: " + e.getMessage());
+            return;
+        }
+    
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_DISC))) {
+            for (String linha : linhas) {
+                writer.write(linha + "\n");
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao atualizar o arquivo de disciplinas: " + e.getMessage());
+        }
+    }
 
 public void removerDisciplina(int id) {
     List<String> disciplinas = new ArrayList<>();

@@ -1,4 +1,3 @@
-NomeDaDisciplina,ID,Creditos,Tipo
-Matematica,101,4,OBRIGATORIA
-Fisica,102,3,OBRIGATORIA
-Artes,103,2,OPTATIVA
+NomeDaDisciplina,ID,Creditos,Tipo,estaDisponivel,idAlunos
+Teste,1,4,OPTATIVA,false,1
+Teste2,2,3,OBRIGATORIA,false,1
