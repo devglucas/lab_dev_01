@@ -169,16 +169,43 @@ public class Aluno extends Usuario {
 
         atualizarCSVAluno();
     }
+
+
     public void solicitarCancelamento(Disciplina disciplina, LocalDate data) {
-    
+        GerenciadorDisciplinas.solicitarCancelamento(disciplina.getNome());
     }
     
     public void realizarPagamento() {
-
+        double valorTotal = 0.0;
+        for (Disciplina disciplina : disciplinasMatriculadas) {
+            valorTotal += disciplina.getValor();
+        }
+        if (valorTotal == 0) {
+            System.out.println("Nenhuma disciplina matriculada. Nada a pagar.");
+            return;
+        }
+        String filePath = "code/Java/DB/Pagamentos.csv";
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+            writer.write(getMatricula() + "," + valorTotal + "," + LocalDate.now() + "\n");
+        } catch (IOException e) {
+            System.out.println("Erro ao registrar pagamento: " + e.getMessage());
+            return;
+        }
+        System.out.println("Pagamento de R$" + valorTotal + " registrado com sucesso para o aluno " + getNome() + ".");
     }
 
     public void consultarDisciplinas(List<Disciplina> disciplinas) {
+            GerenciadorDisciplinas.consultarDisciplinas();
+            if (disciplinas.isEmpty()) {
+                System.out.println("Nenhuma disciplina encontrada.");
+            } else {
+                System.out.println("Disciplinas disponíveis:");
+                for (Disciplina disciplina : disciplinas) {
+                    System.out.println(disciplina);
+                }
+            }
+        }
 
     }
 
-}
+
