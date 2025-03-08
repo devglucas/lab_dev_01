@@ -7,6 +7,22 @@ public class Curso {
     private int creditosNecessarios;
     private List<Disciplina> disciplinas;
     
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public int getCreditosNecessarios() {
+        return creditosNecessarios;
+    }
+
+    public void setCreditosNecessarios(int creditosNecessarios) {
+        this.creditosNecessarios = creditosNecessarios;
+    }
+
     public Curso(String nome, int creditosNecessarios, List<Disciplina> disciplinas){
         this.nome = nome;
         this.creditosNecessarios = creditosNecessarios;

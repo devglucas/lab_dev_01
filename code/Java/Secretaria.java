@@ -19,7 +19,8 @@ public class Secretaria extends Usuario{
     private static final String FILE_PROF = FILE_PATH + "Professores.csv";
     private static final String FILE_DISC = FILE_PATH + "Disciplinas.csv";
     private static final String FILE_ALUN = FILE_PATH + "Alunos.csv";
-    private static final String FILE_USU = FILE_PATH + "Usuarios.csv"; 
+    private static final String FILE_USU = FILE_PATH + "Usuarios.csv";
+    private static final String FILE_CURSO = FILE_PATH + "Cursos.csv"; 
 
    public static void salvarUsuario(Usuario usuario) {
     try (FileWriter fw = new FileWriter(FILE_USU, true);
@@ -38,7 +39,7 @@ public class Secretaria extends Usuario{
             System.out.println("Erro ao adicionar professor: " + e.getMessage());
         }
     }
-    
+
     // ADICIONA DISCIPLINA AO PROF!!!!!!
     // ADICIONA DISCIPLINA AO PROF!!!!!!
     // ADICIONA DISCIPLINA AO PROF!!!!!!
@@ -248,12 +249,13 @@ public void editarAluno(String matricula, String novoNome) {
 }
 
     public static Disciplina buscarDisciplinaPorId(int id) {
+
         List<Disciplina> disciplinas = listarDisciplinas();
-        for (Disciplina disciplina : disciplinas) {
+         for (Disciplina disciplina : disciplinas) {
             if (disciplina.getId() == id) {
                 return disciplina;
             }
-        }
+         }
         return null; 
     }
 
@@ -310,6 +312,75 @@ public void editarDisciplina(int id, String novoNome, int novoCredito) {
         System.out.println("Erro ao atualizar arquivo: " + e.getMessage());
     }
 }
+
+//PARTE DO CURSO!!!!!!!!!
+//PARTE DO CURSO!!!!!!!!!
+//PARTE DO CURSO!!!!!!!!!
+//PARTE DO CURSO!!!!!!!!!
+//PARTE DO CURSO!!!!!!!!!
+//PARTE DO CURSO!!!!!!!!!
+//PARTE DO CURSO!!!!!!!!!
+
+
+        public void adicionarCurso(Curso curso) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_CURSO, true))) {
+                StringBuilder disciplinasStr = new StringBuilder();
+                for (Disciplina disciplina : curso.getDisciplinas()) {
+                    disciplinasStr.append(disciplina.getId()).append(";");
+                }
+                writer.write(curso.getNome() + "," + curso.getCreditosNecessarios() + "," + disciplinasStr.toString() + "\n");
+            } catch (IOException e) {
+                System.out.println("Erro ao adicionar curso: " + e.getMessage());
+            }
+        }
+
+        public List<Curso> listarCursos() {
+            List<Curso> cursos = new ArrayList<>();
+            try (BufferedReader reader = new BufferedReader(new FileReader(FILE_CURSO))) {
+                String linha;
+                while ((linha = reader.readLine()) != null) {
+                    String[] dados = linha.split(",");
+                    if (dados.length >= 3) {
+                        String nome = dados[0].trim();
+                        int creditosNecessarios = Integer.parseInt(dados[1].trim());
+                        String[] idsDisciplinas = dados[2].split(";");
+                        List<Disciplina> disciplinas = new ArrayList<>();
+                        for (String id : idsDisciplinas) {
+                            Disciplina disciplina = buscarDisciplinaPorId(Integer.parseInt(id.trim()));
+                            if (disciplina != null) {
+                                disciplinas.add(disciplina);
+                            }
+                        }
+                        cursos.add(new Curso(nome, creditosNecessarios, disciplinas));
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println("Erro ao ler cursos: " + e.getMessage());
+            }
+            return cursos;
+        }
+
+        public void removerCurso(String nome) {
+            List<String> cursos = new ArrayList<>();
+            try (BufferedReader reader = new BufferedReader(new FileReader(FILE_CURSO))) {
+                String linha;
+                while ((linha = reader.readLine()) != null) {
+                    if (!linha.contains(nome)) {
+                        cursos.add(linha);
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println("Erro ao ler arquivo: " + e.getMessage());
+            }
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_CURSO))) {
+                for (String curso : cursos) {
+                    writer.write(curso + "\n");
+                }
+            } catch (IOException e) {
+                System.out.println("Erro ao atualizar arquivo: " + e.getMessage());
+            }
+        }
     
     public void cancelarDisciplina(Disciplina disciplina) {
         
