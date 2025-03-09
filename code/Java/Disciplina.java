@@ -1,5 +1,9 @@
 package code.Java;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Disciplina {
@@ -86,6 +90,53 @@ public class Disciplina {
         return id;
     }
 
-    
-    public void gerarCurriculo() {}
+    public static Disciplina buscarDisciplinaPorId(int id) {
+
+        List<Disciplina> disciplinas = Disciplina.listarDisciplinas();
+        for (Disciplina disciplina : disciplinas) {
+            if (disciplina.getId() == id) {
+                return disciplina;
+            }
+        }
+        return null;
+    }
+
+     public static List<Disciplina> listarDisciplinas() {
+        String FILE_PATH = "code/Java/DB/";
+        String FILE_DISC = FILE_PATH + "Disciplinas.csv";
+        
+        List<Disciplina> disciplinas = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_DISC))) {
+            String linha;
+            boolean primeiraLinha = true;
+            while ((linha = reader.readLine()) != null) {
+                if (primeiraLinha) {
+                    primeiraLinha = false;
+                    continue;
+                }
+
+                String[] dados = linha.split(",");
+
+                if (dados.length >= 4) {
+                    try {
+                        int id = Integer.parseInt(dados[1].trim());
+                        String nome = dados[0].trim();
+                        int credito = Integer.parseInt(dados[2].trim());
+                        TIPODISCIPLINA tipo = TIPODISCIPLINA.valueOf(dados[3].trim());
+                        disciplinas.add(new Disciplina(nome, id, credito, tipo, new ArrayList<>()));
+                    } catch (NumberFormatException e) {
+                        System.out.println("Erro ao converter número na linha: " + linha);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Tipo de disciplina inválido na linha: " + linha);
+                    }
+                } else {
+                    System.out.println("Linha inválida no arquivo de disciplinas: " + linha);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao ler disciplinas: " + e.getMessage());
+        }
+        return disciplinas;
+    }
+
 }

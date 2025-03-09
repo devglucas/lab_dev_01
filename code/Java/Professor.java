@@ -1,5 +1,8 @@
 package code.Java;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +36,46 @@ public class Professor extends Usuario {
 
     public void adicionarDisciplina(Disciplina disciplina) {
         this.disciplinas.add(disciplina);
+    }
+
+    public static List<Professor> buscarProfessoresPorDisciplina(int idDisciplina) {
+         String FILE_PATH = "code/Java/DB/";
+         String FILE_PROF = FILE_PATH + "Professores.csv";
+
+        List<Professor> professores = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PROF))) {
+            String linha;
+            boolean primeiraLinha = true;
+
+            while ((linha = reader.readLine()) != null) {
+                if (primeiraLinha) {
+                    primeiraLinha = false; 
+                    continue;
+                }
+                String[] dados = linha.split(",");
+                if (dados.length > 4 && !dados[4].isEmpty()) {
+                    String[] idsDisciplinas = dados[4].split(";");
+                    for (String id : idsDisciplinas) {
+                        try {
+                            int idDisciplinaProfessor = Integer.parseInt(id.trim());
+                            if (idDisciplinaProfessor == idDisciplina) {
+                                String nome = dados[0];
+                                String matricula = dados[1];
+                                String email = dados[2];
+                                String senha = dados[3];
+                                professores.add(new Professor(nome, matricula, email, senha));
+                                break;
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Erro ao converter ID da disciplina: " + id);
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao buscar professores: " + e.getMessage());
+        }
+        return professores;
     }
 
     //BGL PRA ESCREVER NO ARQUIVO CSV SE NAO VAI O OBJETO INTEIRO

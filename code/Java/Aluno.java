@@ -66,6 +66,40 @@ public class Aluno extends Usuario {
         super(email, senha, "ALUNO");
     }
 
+    public static Aluno buscarAlunoPorId(String idAluno) {
+        String FILE_PATH = "code/Java/DB/";
+        String FILE_ALUN = FILE_PATH + "Alunos.csv";
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_ALUN))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                String[] dados = linha.split(",");
+                if (dados.length >= 4 && dados[3].equals(idAluno)) {
+                    String email = dados[0];
+                    String senha = dados[1];
+                    String nome = dados[2];
+                    String matricula = dados[3];
+                    String nomeCurso = dados[4];
+                    Curso curso = Curso.buscarCursoPorNome(nomeCurso);
+                    List<Disciplina> disciplinas = new ArrayList<>();
+                    if (dados.length > 5) {
+                        String[] idsDisciplinas = dados[5].split(";");
+                        for (String id : idsDisciplinas) {
+                            Disciplina disciplina = Disciplina.buscarDisciplinaPorId(Integer.parseInt(id.trim()));
+                            if (disciplina != null) {
+                                disciplinas.add(disciplina);
+                            }
+                        }
+                    }
+                    return new Aluno(email, senha, nome, curso, matricula, disciplinas);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao buscar aluno: " + e.getMessage());
+        }
+        return null;
+    }
+
     public static Aluno buscarAlunoPorEmail(String email) {
         String filePath = "code/Java/DB/Alunos.csv";
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -82,14 +116,14 @@ public class Aluno extends Usuario {
                     if (dados.length > 4 && !dados[5].isEmpty()) {
                         String[] disciplinasIds = dados[5].split(";");
                         for (String id : disciplinasIds) {
-                            Disciplina disciplina = Secretaria.buscarDisciplinaPorId(Integer.parseInt(id.trim()));
+                            Disciplina disciplina = Disciplina.buscarDisciplinaPorId(Integer.parseInt(id.trim()));
                             if (disciplina != null) {
                                 disciplinasMatriculadas.add(disciplina);
                             }
                         }
                     }
     
-                    Curso curso = Secretaria.listarCursos().stream()
+                    Curso curso = Curso.listarCursos().stream()
                     .filter(c -> c.getNome().equals(nomeCurso))
                     .findFirst()
                     .orElse(null);
@@ -104,7 +138,7 @@ public class Aluno extends Usuario {
     }
     public static List<Disciplina> listarDisciplinasDisponiveis() {
         List<Disciplina> disciplinasDisponiveis = new ArrayList<>();
-        for (Disciplina disciplina : Secretaria.listarDisciplinas()) {
+        for (Disciplina disciplina : Disciplina.listarDisciplinas()) {
             if (disciplina.isEstaDisponivel()) {
                 disciplinasDisponiveis.add(disciplina);
             }
@@ -131,11 +165,7 @@ public class Aluno extends Usuario {
             System.out.println("Limite de disciplinas optativas atingido.");
             return;
         }
-        //LOGICA DE ATUALIZACAO DO CSV QUANDO FAZ MATRICULA::
-         //LOGICA DE ATUALIZACAO DO CSV QUANDO FAZ MATRICULA::
-          //LOGICA DE ATUALIZACAO DO CSV QUANDO FAZ MATRICULA::
-           //LOGICA DE ATUALIZACAO DO CSV QUANDO FAZ MATRICULA::
-            //LOGICA DE ATUALIZACAO DO CSV QUANDO FAZ MATRICULA::
+
         disciplinasMatriculadas.add(disciplina);
         disciplina.adicionarAluno(this); 
         Secretaria.atualizarDisciplinaNoCSV(disciplina); 

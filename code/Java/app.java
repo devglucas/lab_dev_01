@@ -40,7 +40,7 @@ public class app {
         switch (opcao) {
             case 1:
                 System.out.println("Disciplinas disponíveis:");
-                List<Disciplina> disciplinasDisponiveis = Secretaria.listarDisciplinas();
+                List<Disciplina> disciplinasDisponiveis = Curso.listarDisciplinasPorCurso(aluno.getCurso().toString());
                 for (Disciplina disciplina : disciplinasDisponiveis) {
                     System.out.println("ID: " + disciplina.getId() + " - " + disciplina.getNome() + " (" + disciplina.getTipoDisciplina() + ")");
                 }
@@ -48,7 +48,7 @@ public class app {
                 System.out.print("Digite o ID da disciplina que deseja se matricular: ");
                 int idDisciplina = scanner.nextInt();
                 scanner.nextLine();
-                Disciplina disciplina = Secretaria.buscarDisciplinaPorId(idDisciplina);
+                Disciplina disciplina = Disciplina.buscarDisciplinaPorId(idDisciplina);
                 if (disciplina == null) {
                     System.out.println("Disciplina não encontrada.");
                 } else {
@@ -68,7 +68,7 @@ public class app {
                     System.out.print("Digite o ID da disciplina que deseja cancelar: ");
                     int idDisciplinaParaCancelar = scanner.nextInt();
                     scanner.nextLine(); // Limpa o buffer
-                    Disciplina disciplinaParaCancelar = Secretaria.buscarDisciplinaPorId(idDisciplinaParaCancelar);
+                    Disciplina disciplinaParaCancelar = Disciplina.buscarDisciplinaPorId(idDisciplinaParaCancelar);
                     if (disciplinaParaCancelar == null) {
                         System.out.println("Disciplina não encontrada.");
                     } else {
@@ -176,7 +176,7 @@ public class app {
 
                         case 2:
                         System.out.println("Disciplinas disponíveis:");
-                        List<Disciplina> disciplinasDisponiveis = Secretaria.listarDisciplinas();
+                        List<Disciplina> disciplinasDisponiveis = Disciplina.listarDisciplinas();
                         for (Disciplina disciplina : disciplinasDisponiveis) {
                             System.out.println("ID: " + disciplina.getId() + " - " + disciplina.getNome());
                         }
@@ -218,13 +218,13 @@ public class app {
                     System.out.print("Nome do curso do aluno: ");
                     String nomeCurso1 = scanner.nextLine();
 
-                    Curso cursoAluno = Secretaria.listarCursos().stream()
+                    Curso cursoAluno = Curso.listarCursos().stream()
                             .filter(c -> c.getNome().equals(nomeCurso1))
                             .findFirst()
                             .orElse(null);
 
                     System.out.println("Disciplinas disponíveis:");
-                    List<Disciplina> disciplinasDisponiveis2 = Secretaria.listarDisciplinasPorCurso(nomeCurso1);
+                    List<Disciplina> disciplinasDisponiveis2 = Curso.listarDisciplinasPorCurso(nomeCurso1);
                     for (Disciplina disciplina : disciplinasDisponiveis2) {
                         System.out.println("ID: " + disciplina.getId() + " - " + disciplina.getNome());
                     }
@@ -328,7 +328,7 @@ public class app {
                         scanner.nextLine(); 
 
                         System.out.println("Disciplinas disponíveis:");
-                        List<Disciplina> disciplinasDisponiveisCurso = Secretaria.listarDisciplinas();
+                        List<Disciplina> disciplinasDisponiveisCurso = Disciplina.listarDisciplinas();
                         for (Disciplina disciplina : disciplinasDisponiveisCurso) {
                             System.out.println("ID: " + disciplina.getId() + " - " + disciplina.getNome());
                         }
@@ -355,7 +355,7 @@ public class app {
                     
                     case 13:
                         System.out.println("Cursos disponíveis:");
-                        List<Curso> cursosDisponiveis = Secretaria.listarCursos();
+                        List<Curso> cursosDisponiveis = Curso.listarCursos();
                         for (Curso curso : cursosDisponiveis) {
                             System.out.println("Nome: " + curso.getNome() + " - Créditos Necessários: " + curso.getCreditosNecessarios());
                         }
