@@ -1,6 +1,6 @@
 NomeDaDisciplina,ID,Creditos,Tipo,estaDisponivel,idAlunos
-Teste,1,4,OPTATIVA,false,123
-Teste2,2,3,OBRIGATORIA,false,123
-Teste15,106,4,OBRIGATORIA,false,123
-Teste14,107,4,OBRIGATORIA,false,123
-Teste13,108,4,OBRIGATORIA,false,123
+Teste,1,4,OPTATIVA,true,123
+Teste2,2,3,OBRIGATORIA,true,123
+Teste15,106,4,OBRIGATORIA,true,123
+Teste14,107,4,OBRIGATORIA,true,
+Teste13,108,4,OBRIGATORIA,true,

@@ -18,7 +18,7 @@ public class app {
         }
 
         if (usuario.getTipo().equals("GERENTE_FINANCEIRO")) {
-            
+
             int opcao = -1;
             do {
                 System.out.println("\n=== Sistema do gerente financeiro ===");
@@ -143,7 +143,7 @@ public class app {
 }
 
         if (usuario.getTipo().equals("PROFESSOR")) {
-            Professor professor = new Professor(usuario.getEmail(), usuario.getSenha());
+            Professor professor = Professor.buscarProfessorPorEmail(usuario.getEmail());
             int opcao = -1;
             do {
                 System.out.println("\n=== Sistema dos professores ===");
@@ -162,8 +162,8 @@ public class app {
 
                 switch (opcao) {
                     case 1:
-                        
-                        break;
+                    professor.listarAlunosDasDisciplinas();
+                    break;
                     case 0:
                         System.out.println("Encerrando a aplicação.");
                         break;
