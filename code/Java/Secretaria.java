@@ -306,7 +306,7 @@ public void editarAluno(String matricula, String novoNome) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_DISC, true))) {
             StringBuilder alunosStr = new StringBuilder();
             for (Aluno aluno : disciplina.getAlunosMatriculados()) {
-                alunosStr.append(aluno.getMatricula()).append(";"); // Usa o ID do aluno (matrícula)
+                alunosStr.append(aluno.getMatricula()).append(";"); 
             }
             if (alunosStr.length() > 0) {
                 alunosStr.deleteCharAt(alunosStr.length() - 1);
@@ -427,15 +427,12 @@ public void editarDisciplina(int id, String novoNome, int novoCredito) {
         public static List<Disciplina> listarDisciplinasPorCurso(String nomeCurso) {
             List<Disciplina> disciplinasDoCurso = new ArrayList<>();
             List<Curso> cursos = listarCursos();
-        
-            // Encontra o curso pelo nome
             Curso cursoSelecionado = cursos.stream()
                     .filter(curso -> curso.getNome().equalsIgnoreCase(nomeCurso))
                     .findFirst()
                     .orElse(null);
         
             if (cursoSelecionado != null) {
-                // Obtém as disciplinas do curso
                 disciplinasDoCurso = cursoSelecionado.getDisciplinas();
             } else {
                 throw new IllegalAccessError("Nenhum curso encontrado com o nome especificado.");
@@ -499,12 +496,117 @@ public void editarDisciplina(int id, String novoNome, int novoCredito) {
             }
         }
     
-    public void cancelarDisciplina(Disciplina disciplina) {
-        
+    public void gerarCurriculo(String idAluno) {
+        Aluno aluno = buscarAlunoPorId(idAluno);
+        if (aluno == null) {
+            System.out.println("Aluno não encontrado.");
+            return;
+        }
+        Curso curso = aluno.getCurso();
+        if (curso == null) {
+            System.out.println("Curso não encontrado para o aluno.");
+            return;
+        }
+        List<Disciplina> disciplinasDoCurso = curso.getDisciplinas();
+        if (disciplinasDoCurso.isEmpty()) {
+            System.out.println("Nenhuma disciplina encontrada para o curso.");
+            return;
+        }
+        System.out.println("=== Currículo do Aluno ===");
+        System.out.println("Nome do Aluno: " + aluno.getNome());
+        System.out.println("Curso: " + curso.getNome());
+        System.out.println("Disciplinas:");
+    
+        for (Disciplina disciplina : disciplinasDoCurso) {
+            System.out.println(" - " + disciplina.getNome());
+            List<Professor> professoresDaDisciplina = buscarProfessoresPorDisciplina(disciplina.getId());
+            if (!professoresDaDisciplina.isEmpty()) {
+                System.out.println("   Professores:");
+                for (Professor professor : professoresDaDisciplina) {
+                    System.out.println("    - " + professor.getNome());
+                }
+            } else {
+                System.out.println("   Nenhum professor encontrado para esta disciplina.");
+            }
+        }
     }
-    
-    public void gerarCurriculo() {
-    
+
+    private Aluno buscarAlunoPorId(String idAluno) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_ALUN))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                String[] dados = linha.split(",");
+                if (dados.length >= 4 && dados[3].equals(idAluno)) {
+                    String email = dados[0];
+                    String senha = dados[1];
+                    String nome = dados[2];
+                    String matricula = dados[3];
+                    String nomeCurso = dados[4];
+                    Curso curso = buscarCursoPorNome(nomeCurso);
+                    List<Disciplina> disciplinas = new ArrayList<>();
+                    if (dados.length > 5) {
+                        String[] idsDisciplinas = dados[5].split(";");
+                        for (String id : idsDisciplinas) {
+                            Disciplina disciplina = buscarDisciplinaPorId(Integer.parseInt(id.trim()));
+                            if (disciplina != null) {
+                                disciplinas.add(disciplina);
+                            }
+                        }
+                    }
+                    return new Aluno(email, senha, nome, curso, matricula, disciplinas);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao buscar aluno: " + e.getMessage());
+        }
+        return null;
+    }
+
+    private List<Professor> buscarProfessoresPorDisciplina(int idDisciplina) {
+        List<Professor> professores = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PROF))) {
+            String linha;
+            boolean primeiraLinha = true;
+
+            while ((linha = reader.readLine()) != null) {
+                if (primeiraLinha) {
+                    primeiraLinha = false; 
+                    continue;
+                }
+                String[] dados = linha.split(",");
+                if (dados.length > 4 && !dados[4].isEmpty()) {
+                    String[] idsDisciplinas = dados[4].split(";");
+                    for (String id : idsDisciplinas) {
+                        try {
+                            int idDisciplinaProfessor = Integer.parseInt(id.trim());
+                            if (idDisciplinaProfessor == idDisciplina) {
+                                String nome = dados[0];
+                                String matricula = dados[1];
+                                String email = dados[2];
+                                String senha = dados[3];
+                                professores.add(new Professor(nome, matricula, email, senha));
+                                break;
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Erro ao converter ID da disciplina: " + id);
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao buscar professores: " + e.getMessage());
+        }
+        return professores;
+    }
+
+    private Curso buscarCursoPorNome(String nomeCurso) {
+        List<Curso> cursos = listarCursos();
+        for (Curso curso : cursos) {
+            if (curso.getNome().equalsIgnoreCase(nomeCurso)) {
+                return curso;
+            }
+        }
+        return null;
     }
 
 }

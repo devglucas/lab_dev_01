@@ -315,11 +315,12 @@ public class app {
 
 
                     case 11:
-                        ///parte de gerar curriculo baseado no id do aluno
+                        System.out.print("Digite o ID do aluno para gerar o currículo: ");
+                        String idAlunoCurriculo = scanner.nextLine();
+                        secretaria.gerarCurriculo(idAlunoCurriculo);
                         break;
 
-
-                        case 12:
+                    case 12:
                         System.out.print("Nome do curso: ");
                         String nomeCurso = scanner.nextLine();
                         System.out.print("Créditos necessários: ");
