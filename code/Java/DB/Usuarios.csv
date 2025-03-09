@@ -1,5 +1,6 @@
 email,senha,tipo
 Admin,123,SECRETARIA
+Gerente,123,GERENTE_FINANCEIRO
 teste@,123,ALUNO
 123456,123,ALUNO
 teste@,123,ALUNO
