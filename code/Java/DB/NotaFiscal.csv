@@ -1,1 +1,2 @@
-id,valor,dataDeEmissao,estaPago,estaVerificadoPeloFinanceiro,idAluno
+id,valor,estaPago,estaVerificadoPeloFinanceiro,idAluno
+1,120.0,false,true,123

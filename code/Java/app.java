@@ -18,11 +18,49 @@ public class app {
         }
 
         if (usuario.getTipo().equals("GERENTE_FINANCEIRO")) {
-            //CASES DO GERENTE FINANCEIRO AQUI!!!!!!!!
-            //CASES DO GERENTE FINANCEIRO AQUI!!!!!!!!
-            //CASES DO GERENTE FINANCEIRO AQUI!!!!!!!!
-            //CASES DO GERENTE FINANCEIRO AQUI!!!!!!!!
-            //CASES DO GERENTE FINANCEIRO AQUI!!!!!!!!
+            
+            int opcao = -1;
+            do {
+                System.out.println("\n=== Sistema do gerente financeiro ===");
+                System.out.println("1. Verificar Nota Fiscal");
+                System.out.println("0. Sair");
+                System.out.print("Escolha uma opção: ");
+
+                if (scanner.hasNextInt()) {
+                    opcao = scanner.nextInt();
+                    scanner.nextLine();
+                } else {
+                    System.out.println("Entrada inválida! Digite um número.");
+                    scanner.next();
+                    continue;
+                }
+
+                switch (opcao) {
+                    case 1:
+                    List<NotaFiscal> notasFiscais = NotaFiscal.listarNotasFiscais();
+                    for (NotaFiscal notaFiscal : notasFiscais) {
+                        System.out.println("ID: " + notaFiscal.getId() + " - " + notaFiscal.getValor() + " - " + notaFiscal.getAluno().toString());
+                    }
+                    System.out.print("Digite o ID da nota fiscal a ser verificada: ");
+                        int idNotaFiscal = scanner.nextInt();
+                        scanner.nextLine(); 
+
+                        for (NotaFiscal notaFiscal : notasFiscais) {
+                            if (notaFiscal.getId() == idNotaFiscal) {
+                                notaFiscal.setEstahVerificado(true);
+                                System.out.println("Nota fiscal ID " + idNotaFiscal + " verificada com sucesso.");
+                                break;
+                            }
+                        }
+                        GerenteFinanceiro.escreverNotasFiscais(notasFiscais);
+                        break;
+                    case 0:
+                        System.out.println("Encerrando a aplicação.");
+                        break;
+                    default:
+                        System.out.println("Opção inválida, tente novamente.");
+                }
+            } while (opcao != 0);
 
         }
 
@@ -156,6 +194,7 @@ public class app {
                 System.out.println("12. Adicionar Curso");
                 System.out.println("13. Listar todo os cursos");
                 System.out.println("14. Remover Curso");
+                System.out.println("15. Gerar Nota Fiscal");
                 System.out.println("0. Sair");
                 System.out.print("Escolha uma opção: ");
 
@@ -375,8 +414,16 @@ public class app {
                         String nomeCursoRemover = scanner.nextLine();
                         secretaria.removerCurso(nomeCursoRemover);
                         break;
+
                         case 15:
-                        //logica de cadastrar uma nota fiscal nova com o verificado e pago em falso
+                        // System.out.print("Id da nota fiscal: ");
+                        // String nomeDisciplina = scanner.nextLine();
+                        // System.out.print("ID da disciplina: ");
+                        // int idDisciplina = scanner.nextInt();
+                        // scanner.nextLine(); // Limpa o buffer
+                        // System.out.print("Créditos da disciplina: ");
+                        // int credito = scanner.nextInt();
+                        // scanner.nextLine(); // Limpa o buffer
 
                         break;
                     case 0:

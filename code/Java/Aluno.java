@@ -191,4 +191,9 @@ public class Aluno extends Usuario {
         // Implementação do método de pagamento
     }
 
+    @Override
+    public String toString(){
+        return this.nome;
+    }
+
 }
