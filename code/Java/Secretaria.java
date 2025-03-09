@@ -204,7 +204,7 @@ public class Secretaria extends Usuario{
         for (Disciplina disciplina : aluno.getDisciplinasMatriculadas()) {
             disciplinasStr.append(disciplina.getId()).append(";");
         }
-        writer.write(aluno.getEmail()  + "," + aluno.getSenha()  + "," + aluno.getNome()  + "," + aluno.getMatricula() + "," + disciplinasStr.toString() + "\n");
+        writer.write(aluno.getEmail()  + "," + aluno.getSenha()  + "," + aluno.getNome()  + "," + aluno.getMatricula() + "," + aluno.getCurso().toString() + "," + disciplinasStr.toString() + "\n");
     } catch (IOException e) {
         System.out.println("Erro ao adicionar aluno: " + e.getMessage());
     }
@@ -412,7 +412,6 @@ public void editarDisciplina(int id, String novoNome, int novoCredito) {
 //PARTE DO CURSO!!!!!!!!!
 //PARTE DO CURSO!!!!!!!!!
 
-
         public void adicionarCurso(Curso curso) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_CURSO, true))) {
                 StringBuilder disciplinasStr = new StringBuilder();
@@ -425,11 +424,38 @@ public void editarDisciplina(int id, String novoNome, int novoCredito) {
             }
         }
 
-        public List<Curso> listarCursos() {
+        public static List<Disciplina> listarDisciplinasPorCurso(String nomeCurso) {
+            List<Disciplina> disciplinasDoCurso = new ArrayList<>();
+            List<Curso> cursos = listarCursos();
+        
+            // Encontra o curso pelo nome
+            Curso cursoSelecionado = cursos.stream()
+                    .filter(curso -> curso.getNome().equalsIgnoreCase(nomeCurso))
+                    .findFirst()
+                    .orElse(null);
+        
+            if (cursoSelecionado != null) {
+                // Obtém as disciplinas do curso
+                disciplinasDoCurso = cursoSelecionado.getDisciplinas();
+            } else {
+                throw new IllegalAccessError("Nenhum curso encontrado com o nome especificado.");
+            }
+        
+            return disciplinasDoCurso;
+        }
+        
+        public static List<Curso> listarCursos() {
             List<Curso> cursos = new ArrayList<>();
+            List<String> linhas = new ArrayList<>();
             try (BufferedReader reader = new BufferedReader(new FileReader(FILE_CURSO))) {
                 String linha;
-                while ((linha = reader.readLine()) != null) {
+            boolean primeiraLinha = true; 
+            while ((linha = reader.readLine()) != null) {
+                if (primeiraLinha) {
+                    primeiraLinha = false; 
+                    linhas.add(linha); 
+                    continue;
+                }
                     String[] dados = linha.split(",");
                     if (dados.length >= 3) {
                         String nome = dados[0].trim();

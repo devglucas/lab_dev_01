@@ -76,10 +76,11 @@ public class Aluno extends Usuario {
                     String senha = dados[1];
                     String nome = dados[2];
                     String matricula = dados[3];
+                    String nomeCurso = dados[4];
                     List<Disciplina> disciplinasMatriculadas = new ArrayList<>();
     
-                    if (dados.length > 4 && !dados[4].isEmpty()) {
-                        String[] disciplinasIds = dados[4].split(";");
+                    if (dados.length > 4 && !dados[5].isEmpty()) {
+                        String[] disciplinasIds = dados[5].split(";");
                         for (String id : disciplinasIds) {
                             Disciplina disciplina = Secretaria.buscarDisciplinaPorId(Integer.parseInt(id.trim()));
                             if (disciplina != null) {
@@ -88,7 +89,12 @@ public class Aluno extends Usuario {
                         }
                     }
     
-                    return new Aluno(email, senha, nome, null, matricula, disciplinasMatriculadas);
+                    Curso curso = Secretaria.listarCursos().stream()
+                    .filter(c -> c.getNome().equals(nomeCurso))
+                    .findFirst()
+                    .orElse(null);
+
+            return new Aluno(email, senha, nome, curso, matricula, disciplinasMatriculadas);
                 }
             }
         } catch (IOException e) {
@@ -139,30 +145,17 @@ public class Aluno extends Usuario {
     }
 
     public void cancelarMatricula(Disciplina disciplina) {
-        if (disciplinasMatriculadas == null || disciplinasMatriculadas.isEmpty()) {
-            System.out.println("Você não está matriculado em nenhuma disciplina.");
-            return;
-        }
-    
         if (!disciplinasMatriculadas.contains(disciplina)) {
             System.out.println("Você não está matriculado nesta disciplina.");
             return;
         }
-    
-        // Remove a disciplina da lista de disciplinas matriculadas do aluno
         disciplinasMatriculadas.remove(disciplina);
-    
-        // Remove o aluno da lista de alunos matriculados na disciplina
         disciplina.removerAluno(this);
-    
-        // Atualiza a disciplina no CSV
         Secretaria.atualizarDisciplinaNoCSV(disciplina);
-    
-        // Atualiza o aluno no CSV
         Secretaria.atualizarAlunoNoCSV(this);
-    
         System.out.println("Matrícula na disciplina " + disciplina.getNome() + " cancelada com sucesso.");
     }
+
 
     public void realizarPagamento() {
         // Implementação do método de pagamento
