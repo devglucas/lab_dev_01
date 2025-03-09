@@ -21,7 +21,6 @@ public class Secretaria extends Usuario {
     private static final String FILE_ALUN = FILE_PATH + "Alunos.csv";
     private static final String FILE_USU = FILE_PATH + "Usuarios.csv";
     private static final String FILE_CURSO = FILE_PATH + "Cursos.csv";
-    private static final String FILE_NOTA = FILE_PATH + "NotaFiscal.csv";
 
     public static void salvarUsuario(Usuario usuario) {
         try (FileWriter fw = new FileWriter(FILE_USU, true);
