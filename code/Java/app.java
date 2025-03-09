@@ -17,6 +17,15 @@ public class app {
             return;
         }
 
+        if (usuario.getTipo().equals("GERENTE_FINANCEIRO")) {
+            //CASES DO GERENTE FINANCEIRO AQUI!!!!!!!!
+            //CASES DO GERENTE FINANCEIRO AQUI!!!!!!!!
+            //CASES DO GERENTE FINANCEIRO AQUI!!!!!!!!
+            //CASES DO GERENTE FINANCEIRO AQUI!!!!!!!!
+            //CASES DO GERENTE FINANCEIRO AQUI!!!!!!!!
+
+        }
+
         if (usuario.getTipo().equals("ALUNO")) {
     Aluno aluno = Aluno.buscarAlunoPorEmail(usuario.getEmail());
     int opcao = -1;
@@ -365,6 +374,10 @@ public class app {
                         System.out.print("Nome do curso a remover: ");
                         String nomeCursoRemover = scanner.nextLine();
                         secretaria.removerCurso(nomeCursoRemover);
+                        break;
+                        case 15:
+                        //logica de cadastrar uma nota fiscal nova com o verificado e pago em falso
+
                         break;
                     case 0:
                         System.out.println("Encerrando a aplicação.");
