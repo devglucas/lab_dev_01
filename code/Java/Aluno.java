@@ -1,7 +1,9 @@
 package code.Java;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,7 @@ public class Aluno extends Usuario {
     public static final int limOptativas = 2;
     public static final int limObrigatorias = 4;
     private List<Disciplina> disciplinasMatriculadas;
-    
+
     public String getNome() {
         return nome;
     }
@@ -29,7 +31,7 @@ public class Aluno extends Usuario {
     public void setCurso(Curso curso) {
         this.curso = curso;
     }
-    
+
     public String getMatricula() {
         return matricula;
     }
@@ -46,7 +48,8 @@ public class Aluno extends Usuario {
         this.disciplinasMatriculadas = disciplinasMatriculadas;
     }
 
-    public Aluno(String email, String senha, String nome, Curso curso, String matricula, List<Disciplina> disciplinasMatriculadas) {
+    public Aluno(String email, String senha, String nome, Curso curso, String matricula,
+            List<Disciplina> disciplinasMatriculadas) {
         super(email, senha, "ALUNO");
         this.nome = nome;
         this.curso = curso;
@@ -58,8 +61,8 @@ public class Aluno extends Usuario {
         super(email, senha, "ALUNO");
         this.nome = nome;
         this.matricula = matricula;
-        this.curso = null; 
-        this.disciplinasMatriculadas = new ArrayList<>(); 
+        this.curso = null;
+        this.disciplinasMatriculadas = new ArrayList<>();
     }
 
     public Aluno(String email, String senha) {
@@ -112,7 +115,7 @@ public class Aluno extends Usuario {
                     String matricula = dados[3];
                     String nomeCurso = dados[4];
                     List<Disciplina> disciplinasMatriculadas = new ArrayList<>();
-    
+
                     if (dados.length > 4 && !dados[5].isEmpty()) {
                         String[] disciplinasIds = dados[5].split(";");
                         for (String id : disciplinasIds) {
@@ -122,13 +125,13 @@ public class Aluno extends Usuario {
                             }
                         }
                     }
-    
-                    Curso curso = Curso.listarCursos().stream()
-                    .filter(c -> c.getNome().equals(nomeCurso))
-                    .findFirst()
-                    .orElse(null);
 
-            return new Aluno(email, senha, nome, curso, matricula, disciplinasMatriculadas);
+                    Curso curso = Curso.listarCursos().stream()
+                            .filter(c -> c.getNome().equals(nomeCurso))
+                            .findFirst()
+                            .orElse(null);
+
+                    return new Aluno(email, senha, nome, curso, matricula, disciplinasMatriculadas);
                 }
             }
         } catch (IOException e) {
@@ -136,6 +139,7 @@ public class Aluno extends Usuario {
         }
         return null;
     }
+
     public static List<Disciplina> listarDisciplinasDisponiveis() {
         List<Disciplina> disciplinasDisponiveis = new ArrayList<>();
         for (Disciplina disciplina : Disciplina.listarDisciplinas()) {
@@ -167,27 +171,65 @@ public class Aluno extends Usuario {
         }
 
         disciplinasMatriculadas.add(disciplina);
-        disciplina.adicionarAluno(this); 
-        Secretaria.atualizarDisciplinaNoCSV(disciplina); 
+        disciplina.adicionarAluno(this);
+        Secretaria.atualizarDisciplinaNoCSV(disciplina);
         System.out.println("Matrícula na disciplina " + disciplina.getNome() + " realizada com sucesso.");
-    
-        Secretaria.atualizarAlunoNoCSV(this); 
+
+        Secretaria.atualizarAlunoNoCSV(this);
     }
 
     public void cancelarMatricula(Disciplina disciplina) {
         disciplinasMatriculadas.remove(disciplina);
-        disciplina.removerAluno(this); 
-        Secretaria.atualizarDisciplinaNoCSV(disciplina); 
+        disciplina.removerAluno(this);
+        Secretaria.atualizarDisciplinaNoCSV(disciplina);
         Secretaria.atualizarAlunoNoCSV(this);
         System.out.println("Matrícula na disciplina " + disciplina.getNome() + " cancelada com sucesso.");
     }
 
-    public void realizarPagamento() {
-        // Implementação do método de pagamento
+    public void realizarPagamento(int idNotaSelecionada) {
+        String FILE_PATH = "code/Java/DB/";
+        String FILE_NOTA_FISCAL = FILE_PATH + "NotaFiscal.csv";
+        List<String> notasAtualizadas = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NOTA_FISCAL))) {
+            String linha;
+            boolean primeiraLinha = true;
+
+            while ((linha = reader.readLine()) != null) {
+                if (primeiraLinha) {
+                    notasAtualizadas.add(linha);
+                    primeiraLinha = false;
+                    continue;
+                }
+
+                String[] dados = linha.split(",");
+                if (dados.length >= 5 && dados[4].equals(this.matricula) && dados[2].equals("false")
+                        && dados[3].equals("true")) {
+                    int idNota = Integer.parseInt(dados[0].trim());
+                    if (idNota == idNotaSelecionada) {
+                        dados[2] = "true";
+                        linha = String.join(",", dados);
+                        System.out.println("Nota fiscal ID " + idNota + " paga com sucesso.");
+                    }
+                }
+                notasAtualizadas.add(linha);
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao ler o arquivo de notas fiscais: " + e.getMessage());
+            return;
+        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NOTA_FISCAL))) {
+            for (String linha : notasAtualizadas) {
+                writer.write(linha + "\n");
+            }
+            System.out.println("Arquivo de notas fiscais atualizado com sucesso.");
+        } catch (IOException e) {
+            System.out.println("Erro ao atualizar o arquivo de notas fiscais: " + e.getMessage());
+        }
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return this.nome;
     }
 

@@ -99,7 +99,7 @@ public static List<NotaFiscal> listarNotasFiscais() {
                     boolean estahVerificado = Boolean.parseBoolean(dados[3].trim());
                     String idAluno = dados[4].trim();
                     Aluno aluno = Aluno.buscarAlunoPorId(idAluno);
-                    if (!estahVerificado && aluno != null) {
+                    if (aluno != null) {
                         notasFiscais.add(new NotaFiscal(id, valor, estahPago, estahVerificado, aluno));
                     }
                 } catch (NumberFormatException e) {
