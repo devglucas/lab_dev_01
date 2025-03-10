@@ -3,6 +3,7 @@ package code.Java;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class app {
     public static void main(String[] args) {
@@ -72,6 +73,7 @@ public class app {
         System.out.println("1. Solicitar matrícula");
         System.out.println("2. Solicitar cancelamento de matrícula");
         System.out.println("3. Ver Disciplinas Matriculadas");
+        
         System.out.println("0. Sair");
         System.out.print("Escolha uma opção: ");
 
@@ -132,6 +134,32 @@ public class app {
                 for (Disciplina disciplinaMatriculada : aluno.getDisciplinasMatriculadas()) {
                     System.out.println("ID: " + disciplinaMatriculada.getId() + " - " + disciplinaMatriculada.getNome() + " (" + disciplinaMatriculada.getTipoDisciplina() + ")");
                 }
+                break;
+            case 4: 
+                System.out.println("=== Pagar Boleto ===");
+                List<NotaFiscal> notasPendentes = NotaFiscal.listarNotasFiscais().stream()
+                    .filter(nota -> nota.getAluno().getMatricula().equals(aluno.getMatricula()) && !nota.isEstahPago())
+                    .collect(Collectors.toList());
+
+                if (notasPendentes.isEmpty()) {
+                    System.out.println("Não há notas fiscais pendentes para pagamento.");
+                    break;
+                }
+                System.out.println("Notas fiscais pendentes:");
+                for (NotaFiscal nota : notasPendentes) {
+                    System.out.println("ID: " + nota.getId() + " - Valor: " + nota.getValor());
+                }
+                System.out.print("Digite o ID da nota fiscal que deseja pagar: ");
+                int idNotaParaPagar = scanner.nextInt();
+                scanner.nextLine(); 
+                boolean notaEncontrada = notasPendentes.stream()
+                    .anyMatch(nota -> nota.getId() == idNotaParaPagar);
+
+                if (!notaEncontrada) {
+                    System.out.println("Nota fiscal não encontrada ou já paga.");
+                    break;
+                }
+                aluno.realizarPagamento(idNotaParaPagar); 
                 break;
             case 0:
                 System.out.println("Encerrando a aplicação.");
@@ -415,16 +443,22 @@ public class app {
                         secretaria.removerCurso(nomeCursoRemover);
                         break;
 
-                        case 15:
-                        // System.out.print("Id da nota fiscal: ");
-                        // String nomeDisciplina = scanner.nextLine();
-                        // System.out.print("ID da disciplina: ");
-                        // int idDisciplina = scanner.nextInt();
-                        // scanner.nextLine(); // Limpa o buffer
-                        // System.out.print("Créditos da disciplina: ");
-                        // int credito = scanner.nextInt();
-                        // scanner.nextLine(); // Limpa o buffer
-
+                    case 15:
+                        System.out.print("ID da nota fiscal: ");
+                        int idNotaFiscal = scanner.nextInt();
+                        scanner.nextLine(); 
+                        System.out.print("Valor da nota fiscal: ");
+                        double valorNotaFiscal = scanner.nextDouble();
+                        scanner.nextLine(); 
+                        System.out.print("ID do aluno: ");
+                        String idAlunoNotaFiscal = scanner.nextLine();
+                        Aluno alunoNotaFiscal = Aluno.buscarAlunoPorId(idAlunoNotaFiscal);
+                        if (alunoNotaFiscal == null) {
+                            System.out.println("Aluno não encontrado. Não foi possível gerar a nota fiscal.");
+                            break;
+                        }
+                        NotaFiscal notaFiscal = new NotaFiscal(idNotaFiscal, valorNotaFiscal, false, false, alunoNotaFiscal);
+                        secretaria.gerarNotaFiscal(notaFiscal);
                         break;
                     case 0:
                         System.out.println("Encerrando a aplicação.");

@@ -453,5 +453,21 @@ public class Secretaria extends Usuario {
             }
         }
     }
+    
+    public void gerarNotaFiscal(NotaFiscal notaFiscal) {
+        String FILE_NOTA_FISCAL = FILE_PATH + "NotaFiscal.csv";
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NOTA_FISCAL, true))) {
+            writer.write(
+                notaFiscal.getId() + "," + 
+                notaFiscal.getValor() + "," + 
+                notaFiscal.isEstahPago() + "," + 
+                notaFiscal.isEstahVerificado() + "," + 
+                notaFiscal.getAluno().getMatricula() + "\n" // Corrigido: Usa o ID do aluno
+            );
+            System.out.println("Nota fiscal gerada com sucesso.");
+        } catch (IOException e) {
+            System.out.println("Erro ao gerar nota fiscal: " + e.getMessage());
+        }
+    }
 
 }
