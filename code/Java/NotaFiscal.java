@@ -12,7 +12,7 @@ public class NotaFiscal {
     private boolean estahPago;
     private boolean estahVerificado;
     private Aluno aluno;
-    
+
     public NotaFiscal(int id, double valor, boolean estahPago, boolean estahVerificado,
             Aluno aluno) {
         this.id = id;
@@ -22,21 +22,17 @@ public class NotaFiscal {
         this.aluno = aluno;
     }
 
-
     public int getId() {
         return id;
     }
-
 
     public void setId(int id) {
         this.id = id;
     }
 
-
     public double getValor() {
         return valor;
     }
-
 
     public void setValor(double valor) {
         this.valor = valor;
@@ -46,73 +42,68 @@ public class NotaFiscal {
         return estahPago;
     }
 
-
     public void setEstahPago(boolean estahPago) {
         this.estahPago = estahPago;
     }
-
 
     public boolean isEstahVerificado() {
         return estahVerificado;
     }
 
-
     public void setEstahVerificado(boolean estahVerificado) {
         this.estahVerificado = estahVerificado;
     }
-
 
     public Aluno getAluno() {
         return aluno;
     }
 
-
     public void setAluno(Aluno aluno) {
         this.aluno = aluno;
     }
 
-
-    public NotaFiscal emitirNotaFiscal(Aluno aluno, double valor) { return null; }
-
-
-public static List<NotaFiscal> listarNotasFiscais() {
-    String FILE_PATH = "code/Java/DB/";
-    String FILE_NOTA_FISCAL = FILE_PATH + "NotaFiscal.csv";
-
-    List<NotaFiscal> notasFiscais = new ArrayList<>();
-    try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NOTA_FISCAL))) {
-        String linha;
-        boolean primeiraLinha = true;
-        while ((linha = reader.readLine()) != null) {
-            if (primeiraLinha) {
-                primeiraLinha = false;
-                continue;
-            }
-
-            String[] dados = linha.split(",");
-
-            if (dados.length >= 5) {
-                try {
-                    int id = Integer.parseInt(dados[0].trim());
-                    double valor = Double.parseDouble(dados[1].trim());
-                    boolean estahPago = Boolean.parseBoolean(dados[2].trim());
-                    boolean estahVerificado = Boolean.parseBoolean(dados[3].trim());
-                    String idAluno = dados[4].trim();
-                    Aluno aluno = Aluno.buscarAlunoPorId(idAluno);
-                    if (aluno != null) {
-                        notasFiscais.add(new NotaFiscal(id, valor, estahPago, estahVerificado, aluno));
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println("Erro ao converter número na linha: " + linha);
-                }
-            } else {
-                System.out.println("Linha inválida no arquivo de notas fiscais: " + linha);
-            }
-        }
-    } catch (IOException e) {
-        System.out.println("Erro ao ler notas fiscais: " + e.getMessage());
+    public NotaFiscal emitirNotaFiscal(Aluno aluno, double valor) {
+        return null;
     }
-    return notasFiscais;
-}
+
+    public static List<NotaFiscal> listarNotasFiscais() {
+        String FILE_PATH = "code/Java/DB/";
+        String FILE_NOTA_FISCAL = FILE_PATH + "NotaFiscal.csv";
+
+        List<NotaFiscal> notasFiscais = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NOTA_FISCAL))) {
+            String linha;
+            boolean primeiraLinha = true;
+            while ((linha = reader.readLine()) != null) {
+                if (primeiraLinha) {
+                    primeiraLinha = false;
+                    continue;
+                }
+
+                String[] dados = linha.split(",");
+
+                if (dados.length >= 5) {
+                    try {
+                        int id = Integer.parseInt(dados[0].trim());
+                        double valor = Double.parseDouble(dados[1].trim());
+                        boolean estahPago = Boolean.parseBoolean(dados[2].trim());
+                        boolean estahVerificado = Boolean.parseBoolean(dados[3].trim());
+                        String idAluno = dados[4].trim();
+                        Aluno aluno = Aluno.buscarAlunoPorId(idAluno);
+                        if (aluno != null) {
+                            notasFiscais.add(new NotaFiscal(id, valor, estahPago, estahVerificado, aluno));
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Erro ao converter número na linha: " + linha);
+                    }
+                } else {
+                    System.out.println("Linha inválida no arquivo de notas fiscais: " + linha);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao ler notas fiscais: " + e.getMessage());
+        }
+        return notasFiscais;
+    }
 
 }

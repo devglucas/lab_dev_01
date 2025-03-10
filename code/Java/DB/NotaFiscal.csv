@@ -1,2 +1,7 @@
 id,valor,estaPago,estaVerificadoPeloFinanceiro,idAluno
-1,450.0,false,false,123
+1,600.0,false,false,167238
+2,750.0,true,false,167239
+3,680.0,false,false,167240
+4,720.0,false,false,167241
+5,590.0,false,false,167242
+6,640.0,false,false,167243

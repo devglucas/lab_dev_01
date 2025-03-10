@@ -58,7 +58,7 @@ class GerenteFinanceiro extends Usuario {
 
             bw.write("id,valor,estaPago,estaVerificadoPeloFinanceiro,idAluno");
             bw.newLine();
-            
+
             for (NotaFiscal notaFiscal : notasFiscais) {
                 String linha = notaFiscal.getId() + "," +
                         notaFiscal.getValor() + "," +
@@ -77,13 +77,14 @@ class GerenteFinanceiro extends Usuario {
         List<NotaFiscal> notasFiscais = lerNotasFiscais();
         for (NotaFiscal notaFiscal : notasFiscais) {
             if (notaFiscal.getId() == idNotaFiscal) {
-                notaFiscal.setEstahVerificado(true);;
+                notaFiscal.setEstahVerificado(true);
+                ;
                 System.out.println("Nota fiscal ID " + idNotaFiscal + " verificada com sucesso.");
                 escreverNotasFiscais(notasFiscais);
                 return;
             }
         }
-        
+
         System.out.println("Nota fiscal com ID " + idNotaFiscal + " não encontrada.");
     }
 }

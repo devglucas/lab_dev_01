@@ -15,7 +15,7 @@ public class Disciplina {
     private static final int limBaixo = 3;
     public TIPODISCIPLINA tipoDisciplina;
     private List<Aluno> alunosMatriculados;
-    
+
     public String getNome() {
         return nome;
     }
@@ -105,20 +105,20 @@ public class Disciplina {
         String FILE_PATH = "code/Java/DB/";
         String FILE_DISC = FILE_PATH + "Disciplinas.csv";
         List<Aluno> alunosMatriculados = new ArrayList<>();
-    
+
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_DISC))) {
             String linha;
             boolean primeiraLinha = true;
-    
+
             while ((linha = reader.readLine()) != null) {
                 if (primeiraLinha) {
                     primeiraLinha = false;
-                    continue; 
+                    continue;
                 }
-    
+
                 String[] dados = linha.split(",");
                 if (dados.length > 5 && Integer.parseInt(dados[1].trim()) == this.id) {
-                    String idsAlunosStr = dados[5].trim(); 
+                    String idsAlunosStr = dados[5].trim();
                     if (!idsAlunosStr.isEmpty()) {
                         String[] idsAlunos = idsAlunosStr.split(";");
                         for (String idAluno : idsAlunos) {
@@ -132,21 +132,20 @@ public class Disciplina {
                             }
                         }
                     }
-                    break; 
+                    break;
                 }
             }
         } catch (IOException e) {
             System.out.println("Erro ao ler o arquivo de disciplinas: " + e.getMessage());
         }
-    
+
         return alunosMatriculados;
     }
 
-
-     public static List<Disciplina> listarDisciplinas() {
+    public static List<Disciplina> listarDisciplinas() {
         String FILE_PATH = "code/Java/DB/";
         String FILE_DISC = FILE_PATH + "Disciplinas.csv";
-        
+
         List<Disciplina> disciplinas = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_DISC))) {
             String linha;

@@ -164,7 +164,7 @@ public class Secretaria extends Usuario {
                     linhas.add(linha);
                     continue;
                 }
-    
+
                 String[] dados = linha.split(",");
                 if (dados.length > 0 && dados[0].equals(aluno.getEmail())) {
                     StringBuilder disciplinasStr = new StringBuilder();
@@ -183,7 +183,7 @@ public class Secretaria extends Usuario {
             System.out.println("Erro ao ler o arquivo de alunos: " + e.getMessage());
             return;
         }
-    
+
         // Reescreve o arquivo CSV com as linhas atualizadas
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             for (String linha : linhas) {
@@ -193,6 +193,7 @@ public class Secretaria extends Usuario {
             System.out.println("Erro ao atualizar o arquivo de alunos: " + e.getMessage());
         }
     }
+
     public void adicionarAluno(Aluno aluno) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_ALUN, true))) {
 
@@ -453,20 +454,21 @@ public class Secretaria extends Usuario {
             }
         }
     }
+
     public void gerarNotaFiscal(NotaFiscal notaFiscal) {
-         String FILE_NOTA_FISCAL = FILE_PATH + "NotaFiscal.csv";
-         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NOTA_FISCAL, true))) {
-             writer.write(
-                 notaFiscal.getId() + "," + 
-                 notaFiscal.getValor() + "," + 
-                 notaFiscal.isEstahPago() + "," + 
-                 notaFiscal.isEstahVerificado() + "," + 
-                 notaFiscal.getAluno().getMatricula() + "\n" // Corrigido: Usa o ID do aluno
-             );
-             System.out.println("Nota fiscal gerada com sucesso.");
-         } catch (IOException e) {
-             System.out.println("Erro ao gerar nota fiscal: " + e.getMessage());
-         }
-     }
+        String FILE_NOTA_FISCAL = FILE_PATH + "NotaFiscal.csv";
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NOTA_FISCAL, true))) {
+            writer.write(
+                    notaFiscal.getId() + "," +
+                            notaFiscal.getValor() + "," +
+                            notaFiscal.isEstahPago() + "," +
+                            notaFiscal.isEstahVerificado() + "," +
+                            notaFiscal.getAluno().getMatricula() + "\n" // Corrigido: Usa o ID do aluno
+            );
+            System.out.println("Nota fiscal gerada com sucesso.");
+        } catch (IOException e) {
+            System.out.println("Erro ao gerar nota fiscal: " + e.getMessage());
+        }
+    }
 
 }

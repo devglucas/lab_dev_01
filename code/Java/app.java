@@ -147,8 +147,9 @@ public class app {
                     case 4:
                         System.out.println("=== Pagar Boleto ===");
                         List<NotaFiscal> notasPendentes = NotaFiscal.listarNotasFiscais().stream()
-                            .filter(nota -> nota.getAluno().getMatricula().equals(aluno.getMatricula()) && !nota.isEstahPago()  && !nota.isEstahVerificado())
-                            .collect(Collectors.toList());
+                                .filter(nota -> nota.getAluno().getMatricula().equals(aluno.getMatricula())
+                                        && !nota.isEstahPago() && !nota.isEstahVerificado())
+                                .collect(Collectors.toList());
 
                         if (notasPendentes.isEmpty()) {
                             System.out.println("Não há notas fiscais pendentes para pagamento.");
@@ -232,7 +233,7 @@ public class app {
                 System.out.println("10. Remover Disciplina");
                 System.out.println("11. Gerar Currículo");
                 System.out.println("12. Adicionar Curso");
-                System.out.println("13. Listar todo os cursos");
+                System.out.println("13. Listar todos os cursos");
                 System.out.println("14. Remover Curso");
                 System.out.println("15. Gerar Nota Fiscal");
                 System.out.println("0. Sair");
@@ -277,7 +278,7 @@ public class app {
                         break;
 
                     case 3:
-                        System.out.print("ID do professor a editar: ");
+                        System.out.print("Matricula do professor a editar: ");
                         String idProfEdit = scanner.nextLine();
                         System.out.print("Novo nome: ");
                         String novoNomeProf = scanner.nextLine();
@@ -285,7 +286,7 @@ public class app {
                         break;
 
                     case 4:
-                        System.out.print("ID do professor a remover: ");
+                        System.out.print("Matricula do professor a remover: ");
                         String idProfRemover = scanner.nextLine();
                         secretaria.removerProfessor(idProfRemover);
                         break;
@@ -293,7 +294,7 @@ public class app {
                     case 5:
                         System.out.print("Nome do aluno: ");
                         String nomeAluno = scanner.nextLine();
-                        System.out.print("ID do aluno: ");
+                        System.out.print("Matricula do aluno: ");
                         String idAluno = scanner.nextLine();
                         System.out.print("Email do aluno: ");
                         String emailAlun = scanner.nextLine();
@@ -340,7 +341,7 @@ public class app {
                         break;
 
                     case 6:
-                        System.out.print("ID do aluno a editar: ");
+                        System.out.print("Matricula do aluno a editar: ");
                         String idAlunoEdit = scanner.nextLine();
                         System.out.print("Novo nome: ");
                         String novoNomeAluno = scanner.nextLine();
@@ -348,7 +349,7 @@ public class app {
                         break;
 
                     case 7:
-                        System.out.print("ID do aluno a remover: ");
+                        System.out.print("Matricula do aluno a remover: ");
                         String idAlunoRemover = scanner.nextLine();
                         secretaria.removerAluno(idAlunoRemover);
                         break;
@@ -396,7 +397,7 @@ public class app {
                         break;
 
                     case 11:
-                        System.out.print("Digite o ID do aluno para gerar o currículo: ");
+                        System.out.print("Digite o Matricula para gerar o currículo: ");
                         String idAlunoCurriculo = scanner.nextLine();
                         secretaria.gerarCurriculo(idAlunoCurriculo);
                         break;
@@ -458,7 +459,7 @@ public class app {
                         System.out.print("Valor da nota fiscal: ");
                         double valorNotaFiscal = scanner.nextDouble();
                         scanner.nextLine();
-                        System.out.print("ID do aluno: ");
+                        System.out.print("Matricula do aluno: ");
                         String idAlunoNotaFiscal = scanner.nextLine();
                         Aluno alunoNotaFiscal = Aluno.buscarAlunoPorId(idAlunoNotaFiscal);
                         if (alunoNotaFiscal == null) {

@@ -189,7 +189,7 @@ public class Aluno extends Usuario {
     public void realizarPagamento(int idNotaSelecionada) {
         String FILE_PATH = "code/Java/DB/";
         String FILE_NOTA_FISCAL = FILE_PATH + "NotaFiscal.csv";
-        List<String> notasAtualizadas = new ArrayList<>();
+        List<String> linhasAtualizadas = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NOTA_FISCAL))) {
             String linha;
@@ -197,30 +197,36 @@ public class Aluno extends Usuario {
 
             while ((linha = reader.readLine()) != null) {
                 if (primeiraLinha) {
-                    notasAtualizadas.add(linha);
+                    linhasAtualizadas.add(linha);
                     primeiraLinha = false;
                     continue;
                 }
 
                 String[] dados = linha.split(",");
-                if (dados.length >= 5 && dados[4].equals(this.matricula) && dados[2].equals("false")
-                        && dados[3].equals("true")) {
+                if (dados.length >= 5) {
                     int idNota = Integer.parseInt(dados[0].trim());
-                    if (idNota == idNotaSelecionada) {
+                    String matriculaAluno = dados[4].trim();
+                    @SuppressWarnings("unused")
+                    boolean estahPago = Boolean.parseBoolean(dados[2].trim());
+
+                    if (idNota == idNotaSelecionada && matriculaAluno.equals(this.matricula)) {
+
                         dados[2] = "true";
                         linha = String.join(",", dados);
                         System.out.println("Nota fiscal ID " + idNota + " paga com sucesso.");
                     }
                 }
-                notasAtualizadas.add(linha);
+                linhasAtualizadas.add(linha);
             }
         } catch (IOException e) {
             System.out.println("Erro ao ler o arquivo de notas fiscais: " + e.getMessage());
             return;
         }
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NOTA_FISCAL))) {
-            for (String linha : notasAtualizadas) {
-                writer.write(linha + "\n");
+            for (String linha : linhasAtualizadas) {
+                writer.write(linha);
+                writer.newLine();
             }
             System.out.println("Arquivo de notas fiscais atualizado com sucesso.");
         } catch (IOException e) {

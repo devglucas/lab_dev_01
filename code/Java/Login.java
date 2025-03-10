@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Login {
     public static Usuario fazerLogin() {
-        
+
         @SuppressWarnings("resource")
         Scanner scanner = new Scanner(System.in);
         System.out.print("Email: ");
