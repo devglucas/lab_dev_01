@@ -101,6 +101,48 @@ public class Disciplina {
         return null;
     }
 
+    public List<Aluno> getAlunosMatriculados1() {
+        String FILE_PATH = "code/Java/DB/";
+        String FILE_DISC = FILE_PATH + "Disciplinas.csv";
+        List<Aluno> alunosMatriculados = new ArrayList<>();
+    
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_DISC))) {
+            String linha;
+            boolean primeiraLinha = true;
+    
+            while ((linha = reader.readLine()) != null) {
+                if (primeiraLinha) {
+                    primeiraLinha = false;
+                    continue; // Pula o cabeçalho
+                }
+    
+                String[] dados = linha.split(",");
+                if (dados.length > 5 && Integer.parseInt(dados[1].trim()) == this.id) {
+                    String idsAlunosStr = dados[5].trim(); // Pega a coluna de IDs dos alunos
+                    if (!idsAlunosStr.isEmpty()) {
+                        String[] idsAlunos = idsAlunosStr.split(";");
+                        for (String idAluno : idsAlunos) {
+                            try {
+                                Aluno aluno = Aluno.buscarAlunoPorId(idAluno);
+                                if (aluno != null) {
+                                    alunosMatriculados.add(aluno);
+                                }
+                            } catch (NumberFormatException e) {
+                                System.out.println("Erro ao converter ID do aluno: " + idAluno);
+                            }
+                        }
+                    }
+                    break; // Para de procurar após encontrar a disciplina
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao ler o arquivo de disciplinas: " + e.getMessage());
+        }
+    
+        return alunosMatriculados;
+    }
+
+
      public static List<Disciplina> listarDisciplinas() {
         String FILE_PATH = "code/Java/DB/";
         String FILE_DISC = FILE_PATH + "Disciplinas.csv";

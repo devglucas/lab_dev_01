@@ -37,13 +37,14 @@ public class app {
 
                 switch (opcao) {
                     case 1:
-                    List<NotaFiscal> notasFiscais = NotaFiscal.listarNotasFiscais();
-                    for (NotaFiscal notaFiscal : notasFiscais) {
-                        System.out.println("ID: " + notaFiscal.getId() + " - " + notaFiscal.getValor() + " - " + notaFiscal.getAluno().toString());
-                    }
-                    System.out.print("Digite o ID da nota fiscal a ser verificada: ");
+                        List<NotaFiscal> notasFiscais = NotaFiscal.listarNotasFiscais();
+                        for (NotaFiscal notaFiscal : notasFiscais) {
+                            System.out.println("ID: " + notaFiscal.getId() + " - " + notaFiscal.getValor() + " - "
+                                    + notaFiscal.getAluno().toString());
+                        }
+                        System.out.print("Digite o ID da nota fiscal a ser verificada: ");
                         int idNotaFiscal = scanner.nextInt();
-                        scanner.nextLine(); 
+                        scanner.nextLine();
 
                         for (NotaFiscal notaFiscal : notasFiscais) {
                             if (notaFiscal.getId() == idNotaFiscal) {
@@ -65,89 +66,13 @@ public class app {
         }
 
         if (usuario.getTipo().equals("ALUNO")) {
-    Aluno aluno = Aluno.buscarAlunoPorEmail(usuario.getEmail());
-    int opcao = -1;
-    do {
-        System.out.println("\n=== Sistema do Aluno ===");
-        System.out.println("1. Solicitar matrícula");
-        System.out.println("2. Solicitar cancelamento de matrícula");
-        System.out.println("3. Ver Disciplinas Matriculadas");
-        System.out.println("0. Sair");
-        System.out.print("Escolha uma opção: ");
-
-        if (scanner.hasNextInt()) {
-            opcao = scanner.nextInt();
-            scanner.nextLine(); 
-        } else {
-            System.out.println("Entrada inválida! Digite um número.");
-            scanner.next(); 
-            continue;
-        }
-
-        switch (opcao) {
-            case 1:
-                System.out.println("Disciplinas disponíveis:");
-                List<Disciplina> disciplinasDisponiveis = Curso.listarDisciplinasPorCurso(aluno.getCurso().toString());
-                for (Disciplina disciplina : disciplinasDisponiveis) {
-                    System.out.println("ID: " + disciplina.getId() + " - " + disciplina.getNome() + " (" + disciplina.getTipoDisciplina() + ")");
-                }
-
-                System.out.print("Digite o ID da disciplina que deseja se matricular: ");
-                int idDisciplina = scanner.nextInt();
-                scanner.nextLine();
-                Disciplina disciplina = Disciplina.buscarDisciplinaPorId(idDisciplina);
-                if (disciplina == null) {
-                    System.out.println("Disciplina não encontrada.");
-                } else {
-                    aluno.solicitarMatricula(disciplina);
-                }
-                break;
-
-                case 2:
-                System.out.println("Disciplinas disponíveis para o cancelamento:");
-                if (aluno.getDisciplinasMatriculadas() == null || aluno.getDisciplinasMatriculadas().isEmpty()) {
-                    System.out.println("Você não está matriculado em nenhuma disciplina.");
-                } else {
-                    for (Disciplina disciplinaMatriculada : aluno.getDisciplinasMatriculadas()) {
-                        System.out.println("ID: " + disciplinaMatriculada.getId() + " - " + disciplinaMatriculada.getNome() + " (" + disciplinaMatriculada.getTipoDisciplina() + ")");
-                    }
-            
-                    System.out.print("Digite o ID da disciplina que deseja cancelar: ");
-                    int idDisciplinaParaCancelar = scanner.nextInt();
-                    scanner.nextLine(); // Limpa o buffer
-                    Disciplina disciplinaParaCancelar = Disciplina.buscarDisciplinaPorId(idDisciplinaParaCancelar);
-                    if (disciplinaParaCancelar == null) {
-                        System.out.println("Disciplina não encontrada.");
-                    } else {
-                        aluno.cancelarMatricula(disciplinaParaCancelar);
-                    }
-                }
-                break;
-            case 3:
-                System.out.println("Disciplinas matriculadas:");
-                if(aluno.getDisciplinasMatriculadas() == null){
-                        throw new IllegalArgumentException("O aluno nao possui nenhuma disciplina matriculada.");
-                }
-
-                for (Disciplina disciplinaMatriculada : aluno.getDisciplinasMatriculadas()) {
-                    System.out.println("ID: " + disciplinaMatriculada.getId() + " - " + disciplinaMatriculada.getNome() + " (" + disciplinaMatriculada.getTipoDisciplina() + ")");
-                }
-                break;
-            case 0:
-                System.out.println("Encerrando a aplicação.");
-                break;
-            default:
-                System.out.println("Opção inválida, tente novamente.");
-        }
-    } while (opcao != 0);
-}
-
-        if (usuario.getTipo().equals("PROFESSOR")) {
-            Professor professor = Professor.buscarProfessorPorEmail(usuario.getEmail());
+            Aluno aluno = Aluno.buscarAlunoPorEmail(usuario.getEmail());
             int opcao = -1;
             do {
-                System.out.println("\n=== Sistema dos professores ===");
-                System.out.println("1. Verificar alunos");
+                System.out.println("\n=== Sistema do Aluno ===");
+                System.out.println("1. Solicitar matrícula");
+                System.out.println("2. Solicitar cancelamento de matrícula");
+                System.out.println("3. Ver Disciplinas Matriculadas");
                 System.out.println("0. Sair");
                 System.out.print("Escolha uma opção: ");
 
@@ -162,8 +87,61 @@ public class app {
 
                 switch (opcao) {
                     case 1:
-                    professor.listarAlunosDasDisciplinas();
-                    break;
+                        System.out.println("Disciplinas disponíveis:");
+                        List<Disciplina> disciplinasDisponiveis = Curso
+                                .listarDisciplinasPorCurso(aluno.getCurso().toString());
+                        for (Disciplina disciplina : disciplinasDisponiveis) {
+                            System.out.println("ID: " + disciplina.getId() + " - " + disciplina.getNome() + " ("
+                                    + disciplina.getTipoDisciplina() + ")");
+                        }
+
+                        System.out.print("Digite o ID da disciplina que deseja se matricular: ");
+                        int idDisciplina = scanner.nextInt();
+                        scanner.nextLine();
+                        Disciplina disciplina = Disciplina.buscarDisciplinaPorId(idDisciplina);
+                        if (disciplina == null) {
+                            System.out.println("Disciplina não encontrada.");
+                        } else {
+                            aluno.solicitarMatricula(disciplina);
+                        }
+                        break;
+
+                    case 2:
+                        System.out.println("Disciplinas disponíveis para o cancelamento:");
+                        if (aluno.getDisciplinasMatriculadas() == null
+                                || aluno.getDisciplinasMatriculadas().isEmpty()) {
+                            System.out.println("Você não está matriculado em nenhuma disciplina.");
+                        } else {
+                            for (Disciplina disciplinaMatriculada : aluno.getDisciplinasMatriculadas()) {
+                                System.out.println(
+                                        "ID: " + disciplinaMatriculada.getId() + " - " + disciplinaMatriculada.getNome()
+                                                + " (" + disciplinaMatriculada.getTipoDisciplina() + ")");
+                            }
+
+                            System.out.print("Digite o ID da disciplina que deseja cancelar: ");
+                            int idDisciplinaParaCancelar = scanner.nextInt();
+                            scanner.nextLine(); // Limpa o buffer
+                            Disciplina disciplinaParaCancelar = Disciplina
+                                    .buscarDisciplinaPorId(idDisciplinaParaCancelar);
+                            if (disciplinaParaCancelar == null) {
+                                System.out.println("Disciplina não encontrada.");
+                            } else {
+                                aluno.cancelarMatricula(disciplinaParaCancelar);
+                            }
+                        }
+                        break;
+                    case 3:
+                        System.out.println("Disciplinas matriculadas:");
+                        if (aluno.getDisciplinasMatriculadas() == null) {
+                            throw new IllegalArgumentException("O aluno nao possui nenhuma disciplina matriculada.");
+                        }
+
+                        for (Disciplina disciplinaMatriculada : aluno.getDisciplinasMatriculadas()) {
+                            System.out.println(
+                                    "ID: " + disciplinaMatriculada.getId() + " - " + disciplinaMatriculada.getNome()
+                                            + " (" + disciplinaMatriculada.getTipoDisciplina() + ")");
+                        }
+                        break;
                     case 0:
                         System.out.println("Encerrando a aplicação.");
                         break;
@@ -172,7 +150,41 @@ public class app {
                 }
             } while (opcao != 0);
         }
-    
+
+        if (usuario.getTipo().equals("PROFESSOR")) {
+            Professor professor = Professor.buscarProfessorPorEmail(usuario.getEmail());
+            int opcao = -1;
+            do {
+                System.out.println("\n=== Sistema dos professores ===");
+                System.out.println("1. Verificar alunos");
+                System.out.println("2. Listar disciplinas que leciona");
+                System.out.println("0. Sair");
+                System.out.print("Escolha uma opção: ");
+
+                if (scanner.hasNextInt()) {
+                    opcao = scanner.nextInt();
+                    scanner.nextLine();
+                } else {
+                    System.out.println("Entrada inválida! Digite um número.");
+                    scanner.next();
+                    continue;
+                }
+
+                switch (opcao) {
+                    case 1:
+                        professor.listarAlunosDasDisciplinas();
+                        break;
+                    case 2:
+                        professor.listarDisciplinasProfessor();
+                        break;
+                    case 0:
+                        System.out.println("Encerrando a aplicação.");
+                        break;
+                    default:
+                        System.out.println("Opção inválida, tente novamente.");
+                }
+            } while (opcao != 0);
+        }
 
         if (usuario.getTipo().equals("SECRETARIA")) {
             Secretaria secretaria = new Secretaria(usuario.getEmail(), usuario.getSenha());
@@ -221,8 +233,7 @@ public class app {
                         Secretaria.salvarUsuario(new Usuario(emailProf, senhaProf, "PROFESSOR"));
                         break;
 
-
-                        case 2:
+                    case 2:
                         System.out.println("Disciplinas disponíveis:");
                         List<Disciplina> disciplinasDisponiveis = Disciplina.listarDisciplinas();
                         for (Disciplina disciplina : disciplinasDisponiveis) {
@@ -233,10 +244,9 @@ public class app {
                         System.out.print("ID da disciplina a adicionar: ");
                         int idDisciplinaProf = scanner.nextInt();
 
-                        scanner.nextLine(); 
+                        scanner.nextLine();
                         secretaria.adicionarDisciplinaAoProfessor(matriculaProf, idDisciplinaProf);
                         break;
-
 
                     case 3:
                         System.out.print("ID do professor a editar: ");
@@ -246,61 +256,60 @@ public class app {
                         secretaria.editarProfessor(idProfEdit, novoNomeProf);
                         break;
 
-
                     case 4:
                         System.out.print("ID do professor a remover: ");
                         String idProfRemover = scanner.nextLine();
                         secretaria.removerProfessor(idProfRemover);
                         break;
 
-
                     case 5:
-                    System.out.print("Nome do aluno: ");
-                    String nomeAluno = scanner.nextLine();
-                    System.out.print("ID do aluno: ");
-                    String idAluno = scanner.nextLine();
-                    System.out.print("Email do aluno: ");
-                    String emailAlun = scanner.nextLine();
-                    System.out.print("Senha do aluno: ");
-                    String senhaAlun = scanner.nextLine();
-                    System.out.print("Nome do curso do aluno: ");
-                    String nomeCurso1 = scanner.nextLine();
+                        System.out.print("Nome do aluno: ");
+                        String nomeAluno = scanner.nextLine();
+                        System.out.print("ID do aluno: ");
+                        String idAluno = scanner.nextLine();
+                        System.out.print("Email do aluno: ");
+                        String emailAlun = scanner.nextLine();
+                        System.out.print("Senha do aluno: ");
+                        String senhaAlun = scanner.nextLine();
+                        System.out.print("Nome do curso do aluno: ");
+                        String nomeCurso1 = scanner.nextLine();
 
-                    Curso cursoAluno = Curso.listarCursos().stream()
-                            .filter(c -> c.getNome().equals(nomeCurso1))
-                            .findFirst()
-                            .orElse(null);
-
-                    System.out.println("Disciplinas disponíveis:");
-                    List<Disciplina> disciplinasDisponiveis2 = Curso.listarDisciplinasPorCurso(nomeCurso1);
-                    for (Disciplina disciplina : disciplinasDisponiveis2) {
-                        System.out.println("ID: " + disciplina.getId() + " - " + disciplina.getNome());
-                    }
-
-                    List<Disciplina> disciplinasSelecionadas = new ArrayList<>();
-                    System.out.print("Digite os IDs das disciplinas que deseja se matricular (separados por vírgula): ");
-                    String idsDisciplinas = scanner.nextLine();
-                    String[] ids = idsDisciplinas.split(",");
-                    for (String id : ids) {
-                        int idDisciplina = Integer.parseInt(id.trim());
-                        Disciplina disciplinaSelecionada = disciplinasDisponiveis2.stream()
-                                .filter(d -> d.getId() == idDisciplina)
+                        Curso cursoAluno = Curso.listarCursos().stream()
+                                .filter(c -> c.getNome().equals(nomeCurso1))
                                 .findFirst()
                                 .orElse(null);
-                        if (disciplinaSelecionada != null) {
-                            disciplinasSelecionadas.add(disciplinaSelecionada);
-                        } else {
-                            System.out.println("Disciplina com ID " + idDisciplina + " não encontrada.");
+
+                        System.out.println("Disciplinas disponíveis:");
+                        List<Disciplina> disciplinasDisponiveis2 = Curso.listarDisciplinasPorCurso(nomeCurso1);
+                        for (Disciplina disciplina : disciplinasDisponiveis2) {
+                            System.out.println("ID: " + disciplina.getId() + " - " + disciplina.getNome());
                         }
-                    }
 
-                    Aluno aluno = new Aluno(emailAlun, senhaAlun, nomeAluno, cursoAluno, idAluno, disciplinasSelecionadas);
-                    aluno.setDisciplinasMatriculadas(disciplinasSelecionadas);
+                        List<Disciplina> disciplinasSelecionadas = new ArrayList<>();
+                        System.out.print(
+                                "Digite os IDs das disciplinas que deseja se matricular (separados por vírgula): ");
+                        String idsDisciplinas = scanner.nextLine();
+                        String[] ids = idsDisciplinas.split(",");
+                        for (String id : ids) {
+                            int idDisciplina = Integer.parseInt(id.trim());
+                            Disciplina disciplinaSelecionada = disciplinasDisponiveis2.stream()
+                                    .filter(d -> d.getId() == idDisciplina)
+                                    .findFirst()
+                                    .orElse(null);
+                            if (disciplinaSelecionada != null) {
+                                disciplinasSelecionadas.add(disciplinaSelecionada);
+                            } else {
+                                System.out.println("Disciplina com ID " + idDisciplina + " não encontrada.");
+                            }
+                        }
 
-                    secretaria.adicionarAluno(aluno);
-                    Secretaria.salvarUsuario(new Usuario(emailAlun, senhaAlun, "ALUNO"));
-                    break;
+                        Aluno aluno = new Aluno(emailAlun, senhaAlun, nomeAluno, cursoAluno, idAluno,
+                                disciplinasSelecionadas);
+                        aluno.setDisciplinasMatriculadas(disciplinasSelecionadas);
 
+                        secretaria.adicionarAluno(aluno);
+                        Secretaria.salvarUsuario(new Usuario(emailAlun, senhaAlun, "ALUNO"));
+                        break;
 
                     case 6:
                         System.out.print("ID do aluno a editar: ");
@@ -310,13 +319,11 @@ public class app {
                         secretaria.editarAluno(idAlunoEdit, novoNomeAluno);
                         break;
 
-
                     case 7:
                         System.out.print("ID do aluno a remover: ");
                         String idAlunoRemover = scanner.nextLine();
                         secretaria.removerAluno(idAlunoRemover);
                         break;
-
 
                     case 8:
                         System.out.print("Nome da disciplina: ");
@@ -337,9 +344,9 @@ public class app {
                             tipoDisciplina = TIPODISCIPLINA.OBRIGATORIA;
                         }
                         List<Aluno> alunosMatriculados = new ArrayList<>();
-                        secretaria.adicionarDisciplina(new Disciplina(nomeDisciplina, idDisciplina, credito, tipoDisciplina, alunosMatriculados));
+                        secretaria.adicionarDisciplina(new Disciplina(nomeDisciplina, idDisciplina, credito,
+                                tipoDisciplina, alunosMatriculados));
                         break;
-
 
                     case 9:
                         System.out.print("ID da disciplina a editar: ");
@@ -353,14 +360,12 @@ public class app {
                         secretaria.editarDisciplina(idDisciplinaEdit, novoNomeDisciplina, novoCredito);
                         break;
 
-
                     case 10:
                         System.out.print("ID da disciplina a remover: ");
                         int idDisciplinaRemover = scanner.nextInt();
                         scanner.nextLine(); // Limpa o buffer
                         secretaria.removerDisciplina(idDisciplinaRemover);
                         break;
-
 
                     case 11:
                         System.out.print("Digite o ID do aluno para gerar o currículo: ");
@@ -373,16 +378,17 @@ public class app {
                         String nomeCurso = scanner.nextLine();
                         System.out.print("Créditos necessários: ");
                         int creditosNecessarios = scanner.nextInt();
-                        scanner.nextLine(); 
+                        scanner.nextLine();
 
                         System.out.println("Disciplinas disponíveis:");
                         List<Disciplina> disciplinasDisponiveisCurso = Disciplina.listarDisciplinas();
                         for (Disciplina disciplina : disciplinasDisponiveisCurso) {
                             System.out.println("ID: " + disciplina.getId() + " - " + disciplina.getNome());
                         }
-                    
+
                         List<Disciplina> disciplinasSelecionadasCurso = new ArrayList<>();
-                        System.out.print("Digite os IDs das disciplinas que deseja incluir no curso (separados por vírgula): ");
+                        System.out.print(
+                                "Digite os IDs das disciplinas que deseja incluir no curso (separados por vírgula): ");
                         String idsDisciplinasCurso = scanner.nextLine();
                         String[] idsCurso = idsDisciplinasCurso.split(",");
                         for (String id : idsCurso) {
@@ -398,24 +404,26 @@ public class app {
                             }
                         }
 
-                        secretaria.adicionarCurso(new Curso(nomeCurso, creditosNecessarios, disciplinasSelecionadasCurso));
+                        secretaria.adicionarCurso(
+                                new Curso(nomeCurso, creditosNecessarios, disciplinasSelecionadasCurso));
                         break;
-                    
+
                     case 13:
                         System.out.println("Cursos disponíveis:");
                         List<Curso> cursosDisponiveis = Curso.listarCursos();
                         for (Curso curso : cursosDisponiveis) {
-                            System.out.println("Nome: " + curso.getNome() + " - Créditos Necessários: " + curso.getCreditosNecessarios());
+                            System.out.println("Nome: " + curso.getNome() + " - Créditos Necessários: "
+                                    + curso.getCreditosNecessarios());
                         }
                         break;
-                    
+
                     case 14:
                         System.out.print("Nome do curso a remover: ");
                         String nomeCursoRemover = scanner.nextLine();
                         secretaria.removerCurso(nomeCursoRemover);
                         break;
 
-                        case 15:
+                    case 15:
                         // System.out.print("Id da nota fiscal: ");
                         // String nomeDisciplina = scanner.nextLine();
                         // System.out.print("ID da disciplina: ");
