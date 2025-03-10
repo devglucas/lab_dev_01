@@ -62,10 +62,6 @@ public class NotaFiscal {
         this.aluno = aluno;
     }
 
-    public NotaFiscal emitirNotaFiscal(Aluno aluno, double valor) {
-        return null;
-    }
-
     public static List<NotaFiscal> listarNotasFiscais() {
         String FILE_PATH = "code/Java/DB/";
         String FILE_NOTA_FISCAL = FILE_PATH + "NotaFiscal.csv";
