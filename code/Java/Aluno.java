@@ -175,17 +175,12 @@ public class Aluno extends Usuario {
     }
 
     public void cancelarMatricula(Disciplina disciplina) {
-        if (!disciplinasMatriculadas.contains(disciplina)) {
-            System.out.println("Você não está matriculado nesta disciplina.");
-            return;
-        }
         disciplinasMatriculadas.remove(disciplina);
-        disciplina.removerAluno(this);
-        Secretaria.atualizarDisciplinaNoCSV(disciplina);
+        disciplina.removerAluno(this); 
+        Secretaria.atualizarDisciplinaNoCSV(disciplina); 
         Secretaria.atualizarAlunoNoCSV(this);
         System.out.println("Matrícula na disciplina " + disciplina.getNome() + " cancelada com sucesso.");
     }
-
 
     public void realizarPagamento() {
         // Implementação do método de pagamento

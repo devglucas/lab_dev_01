@@ -101,7 +101,7 @@ public class Disciplina {
         return null;
     }
 
-    public List<Aluno> getAlunosMatriculados1() {
+    public List<Aluno> getAlunosMatriculadosProfessor() {
         String FILE_PATH = "code/Java/DB/";
         String FILE_DISC = FILE_PATH + "Disciplinas.csv";
         List<Aluno> alunosMatriculados = new ArrayList<>();
@@ -113,12 +113,12 @@ public class Disciplina {
             while ((linha = reader.readLine()) != null) {
                 if (primeiraLinha) {
                     primeiraLinha = false;
-                    continue; // Pula o cabeçalho
+                    continue; 
                 }
     
                 String[] dados = linha.split(",");
                 if (dados.length > 5 && Integer.parseInt(dados[1].trim()) == this.id) {
-                    String idsAlunosStr = dados[5].trim(); // Pega a coluna de IDs dos alunos
+                    String idsAlunosStr = dados[5].trim(); 
                     if (!idsAlunosStr.isEmpty()) {
                         String[] idsAlunos = idsAlunosStr.split(";");
                         for (String idAluno : idsAlunos) {
@@ -132,7 +132,7 @@ public class Disciplina {
                             }
                         }
                     }
-                    break; // Para de procurar após encontrar a disciplina
+                    break; 
                 }
             }
         } catch (IOException e) {

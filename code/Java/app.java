@@ -120,7 +120,7 @@ public class app {
 
                             System.out.print("Digite o ID da disciplina que deseja cancelar: ");
                             int idDisciplinaParaCancelar = scanner.nextInt();
-                            scanner.nextLine(); // Limpa o buffer
+                            scanner.nextLine(); 
                             Disciplina disciplinaParaCancelar = Disciplina
                                     .buscarDisciplinaPorId(idDisciplinaParaCancelar);
                             if (disciplinaParaCancelar == null) {

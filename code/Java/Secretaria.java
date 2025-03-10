@@ -164,8 +164,9 @@ public class Secretaria extends Usuario {
                     linhas.add(linha);
                     continue;
                 }
-
-                if (linha.contains(aluno.getEmail())) {
+    
+                String[] dados = linha.split(",");
+                if (dados.length > 0 && dados[0].equals(aluno.getEmail())) {
                     StringBuilder disciplinasStr = new StringBuilder();
                     for (Disciplina disciplina : aluno.getDisciplinasMatriculadas()) {
                         disciplinasStr.append(disciplina.getId()).append(";");
@@ -174,8 +175,7 @@ public class Secretaria extends Usuario {
                         disciplinasStr.deleteCharAt(disciplinasStr.length() - 1);
                     }
                     linha = aluno.getEmail() + "," + aluno.getSenha() + "," + aluno.getNome() + ","
-                            + aluno.getMatricula()
-                            + "," + disciplinasStr.toString();
+                            + aluno.getMatricula() + "," + aluno.getCurso().getNome() + "," + disciplinasStr.toString();
                 }
                 linhas.add(linha);
             }
@@ -183,7 +183,8 @@ public class Secretaria extends Usuario {
             System.out.println("Erro ao ler o arquivo de alunos: " + e.getMessage());
             return;
         }
-
+    
+        // Reescreve o arquivo CSV com as linhas atualizadas
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             for (String linha : linhas) {
                 writer.write(linha + "\n");
@@ -192,7 +193,6 @@ public class Secretaria extends Usuario {
             System.out.println("Erro ao atualizar o arquivo de alunos: " + e.getMessage());
         }
     }
-
     public void adicionarAluno(Aluno aluno) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_ALUN, true))) {
 

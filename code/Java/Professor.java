@@ -152,7 +152,7 @@ public class Professor extends Usuario {
         System.out.println("Alunos matriculados nas suas disciplinas:");
         for (Disciplina disciplina : this.disciplinas) {
             System.out.println("\nDisciplina: " + disciplina.getNome() + " (ID: " + disciplina.getId() + ")");
-            List<Aluno> alunosMatriculados = disciplina.getAlunosMatriculados1();
+            List<Aluno> alunosMatriculados = disciplina.getAlunosMatriculadosProfessor();
     
             if (alunosMatriculados.isEmpty()) {
                 System.out.println("Nenhum aluno matriculado nesta disciplina.");
