@@ -147,8 +147,8 @@ public class app {
                     case 4:
                         System.out.println("=== Pagar Boleto ===");
                         List<NotaFiscal> notasPendentes = NotaFiscal.listarNotasFiscais().stream()
-        .filter(nota -> nota.getAluno().getMatricula().equals(aluno.getMatricula()) && !nota.isEstahPago())
-        .collect(Collectors.toList());
+                            .filter(nota -> nota.getAluno().getMatricula().equals(aluno.getMatricula()) && !nota.isEstahPago()  && !nota.isEstahVerificado())
+                            .collect(Collectors.toList());
 
                         if (notasPendentes.isEmpty()) {
                             System.out.println("Não há notas fiscais pendentes para pagamento.");
